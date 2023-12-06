@@ -1,0 +1,445 @@
+﻿@model WorkStatisticsSearchModel
+@{
+    ViewData["Title"] = "외부초안비용";
+}
+
+@section Styles {
+    <link href="../../vendors/glightbox/glightbox.min.css" rel="stylesheet">
+    <link href="../../vendors/flatpickr/flatpickr.min.css" rel="stylesheet">
+    <link href="../../assets/css/theme-rtl.min.css" type="text/css" rel="stylesheet" id="style-rtl">
+    <link href="../../assets/css/theme.min.css" type="text/css" rel="stylesheet" id="style-default">
+    <link href="../../assets/css/user-rtl.min.css" type="text/css" rel="stylesheet" id="user-style-rtl">
+    <style type="text/css">
+        .table > thead > tr > th, .table > tbody > tr > td {
+            border-left-width: 1px;
+            border-right-width: 1px;
+        }
+
+        .fontcenter {
+            text-align: center
+        }
+    </style>
+}
+
+<nav class="mb-2" aria-label="breadcrumb">
+    <ol class="breadcrumb mb-0">
+        <li class="breadcrumb-item"><a href="#!">초안관리</a></li>
+        <li class="breadcrumb-item active">외부초안비용</li>
+    </ol>
+</nav>
+<div class="mb-9">
+    <div class="row g-2 mb-4">
+        <div class="col-auto">
+            <h2 class="mb-0">외부초안비용</h2>
+        </div>
+    </div>
+    <ul class="nav nav-links mb-3 mb-lg-2 mx-n3">
+        <li class="nav-item"><a class="nav-link" aria-current="page" href="/WorkStatistics?MenuGubun=0"><span>초안 비용(월간) </span></a></li>
+        <li class="nav-item"><a class="nav-link" href="/WorkStatistics?MenuGubun=1"><span>주문일 - 예식일 </span></a></li>
+        <li class="nav-item"><a class="nav-link" href="/WorkStatistics?MenuGubun=2"><span>초안 등록건수 </span></a></li>
+        <li class="nav-item"><a class="nav-link" href="/WorkStatistics?MenuGubun=3"><span>초안 작업자별/품목별 작업건수 </span></a></li>
+    </ul>
+
+    <form class="frm" method="get" asp-action="Index" asp-controller="WorkStatistics">
+
+        <input type="hidden" asp-for="MenuGubun" />
+
+
+        <div id="products">
+            <div class="mb-4">
+                <div class="row g-3">
+                    <div class="row gx-3 gy-4">
+
+                        @if (Model.MenuGubun == 2)@* 초안 등록건수 *@
+                        {
+                            @* @Html.DropDownList
+                        <div class="btn-group position-static" role="group" style="width:13.5%">
+                        <div class="btn-group position-static text-nowrap">
+                        <button class="btn btn-phoenix-secondary px-7 flex-shrink-0" type="button" data-bs-toggle="dropdown" data-boundary="window" aria-haspopup="true" aria-expanded="false"
+                        data-bs-reference="parent">
+                        Country<span class="fas fa-angle-down ms-2"></span></button>
+                        <ul class="dropdown-menu">
+                        <li><a class="dropdown-item" href="#">US</a></li>
+                        <li><a class="dropdown-item" href="#">Uk</a></li>
+                        <li><a class="dropdown-item" href="#">Australia</a></li>
+                        </ul>
+                        </div>
+                        </div> *@
+
+                            <div class="col-md-2">
+                                <div class="form-floating">
+                                    <select class="form-select" style="padding-top:13px;height:calc(2.4rem + 2px)" asp-for="Order_Date_Yorn" asp-items="Model.Order_Date_Yorns"></select>
+
+                                </div>
+                            </div>
+                        }
+
+                        <div class="col-sm-2">
+                            <div class="flatpickr-input-container">
+                                <div class="form-floating">
+                                    <input class="form-control datetimepicker" type="text" placeholder="시작일" asp-for="StartDate" value="@Model.StartDate.ToString("yyyy-MM-dd")" data-options='{"disableMobile":true}' style="height:40px" />
+                                    <span class="uil uil-calendar-alt flatpickr-icon text-700"></span>
+                                    <label class="ps-6" for="StartDate">날짜 검색</label>
+
+                                </div>
+
+                            </div>
+                        </div>
+
+                        <div class="col-sm-2">
+                            <div class="flatpickr-input-container">
+                                <div class="form-floating">
+                                    <div class="form-floating">
+                                        <input class="form-control datetimepicker" type="text" placeholder="종료일" asp-for="EndDate" value="@Model.EndDate.ToString("yyyy-MM-dd")" data-options='{"disableMobile":true}' style="height:40px" />
+                                        <span class="uil uil-calendar-alt flatpickr-icon text-700"></span>
+                                        <label class="ps-6" for="EndDate">날짜 검색</label>
+
+                                    </div>
+
+                                </div>
+
+                            </div>
+                        </div>
+
+
+
+                        <div class="col-sm-6 col-md-2">
+                            <div class="form-floating">
+                                <button class="btn btn-primary @Model.BtnClass" type="submit">조회</button>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+        @if (Model.MenuGubun == 0)
+        {
+
+            <div class="mx-lg-n6  bg-white border-top border-bottom border-200 position-relative top-1" style="margin-left:0rem !important;">
+                <div class="table-responsive scrollbar-overlay mx-n1 px-1" data-simplebar="init">
+                    <table class="table table-sm fs--1 mb-0">
+                        <thead>
+                            <tr>
+                                <th scope="col" rowspan="2">작업자</th>
+                                <th scope="col" colspan="4">초안작업량</th>
+                                <th scope="col" rowspan="2">처리[컨펌]건수</th>
+                                <th scope="col" rowspan="2">초안등록금액</th>
+                                <th scope="col" rowspan="2">추가금액[인센티브]</th>
+                                <th scope="col" rowspan="2">합계금액</th>
+                                <th rowspan="2">차감금액[사고건]</th>
+                                <th rowspan="2">실수령액</th>
+                                <th style="background-color: #ced4da;" rowspan="2">청첩장<br>주말작업건수</th>
+                                <th scope="col" style="background-color: #ced4da;" rowspan="2">청첩장<br>주말인센티브</th>
+                                <th style="background-color: #ced4da;" rowspan="2">청첩장<br>주말인센티브 포함 실수령액</th>
+                            </tr>
+                            <tr>
+                                <th>청첩장</th>
+                                <th>답례장</th>
+                                <th>디지털<br>청첩장</th>
+                                <th>약도(.cdr)</th>
+                            </tr>
+                        </thead>
+                        @if (Model.MonthDataModel.Count == 0)
+                        {
+                            <tbody class="list" id="customers-table-body" style="height: 100px">
+                                <tr class="hover-actions-trigger btn-reveal-trigger position-static">
+                                    <td class="customer align-middle white-space-nowrap pe-5" colspan="15" style="text-align:center">데이터가 없습니다</td>
+                                </tr>
+                            </tbody>
+                        }
+                        else
+                        {
+                            <tbody class="list" id="customers-table-body">
+                            @foreach (var item in Model.MonthDataModel)
+                            {
+                               
+                                    <tr class="hover-actions-trigger btn-reveal-trigger position-static">
+                                        <td>
+                                            <p class="mb-0 ms-3 text-1100 fw-bold">@item.AlbaId</p>
+                                        </td>
+                                        <td>@string.Format("{0:#,##0.###}", item.InvitationCnt)</td>@* 청첩장 *@
+                                        <td>@string.Format("{0:#,##0.###}", item.ThanksCnt)</td>@* 답례장 *@
+                                        <td>@string.Format("{0:#,##0.###}", item.DigitalCnt)</td>@* 디지털청첩장 *@
+                                        <td>@string.Format("{0:#,##0.###}", item.MapCnt)</td>@* 약도 *@
+                                        <td>@string.Format("{0:#,##0.###}", item.TotalCnt)</td>@* 처리[컨펌]건수 *@
+                                        <td>@string.Format("{0:#,##0.###}", item.ChoanTotalPrice)</td>@* 초안등록금액 *@
+                                        <td>@string.Format("{0:#,##0.###}", item.AddTotalPrice)</td>@* 추가금액[인센티브] *@
+                                        <td>@string.Format("{0:#,##0.###}", item.TotalPrice)</td>@* 합계금액 *@
+                                        <td>@string.Format("{0:#,##0.###}", item.SagoPrice)</td>@* 차감금액[사고건] *@
+                                        <td>@string.Format("{0:#,##0.###}", item.LastTotalPrice)</td>@* 실수령액 *@
+                                        <td style="background-color: #ced4da;">@string.Format("{0:#,##0.###}", item.WeekWorkCnt)</td>
+                                        <td style="background-color: #ced4da;">
+                                            @string.Format("{0:#,##0.###}", Convert.ToInt32(item.WeekIncenTiveSingleSideCardCnt + item.WeekIncenTiveInitialCardCnt + item.WeekIncenTiveDoubleSideCardCnt + item.WeekIncenTiveLaserCardCnt))
+                                        </td>
+                                        <td style="background-color: #ced4da;">@string.Format("{0:#,##0.###}", item.WeekIncenTiveTotalPrice)</td>
+                                    </tr>
+                              
+
+                            }
+                                <tr class="hover-actions-trigger btn-reveal-trigger position-static;">
+                                    <td style="background-color:#FFCDD2;"></td>
+                                    <td style ="background-color:#FFCDD2;">@string.Format("{0:#,##0.###}", Model.InvitationCntTotal)</td>@* 청첩장합계 *@
+                                    <td style="background-color:#FFCDD2;">@string.Format("{0:#,##0.###}", Model.ThanksCntTotal)</td>@* 답례장합계 *@
+                                    <td style="background-color:#FFCDD2;">@string.Format("{0:#,##0.###}", Model.DigitalCntTotal)</td>@* 디지털청첩장합계 *@
+                                    <td style="background-color:#FFCDD2;">@string.Format("{0:#,##0.###}", Model.MapCntTotal)</td>@* 약도합계 *@
+                                    <td style="background-color:#FFCDD2;">@string.Format("{0:#,##0.###}", Model.TotalCntTot)</td>@* 처리[컨펌]건수합계 *@
+                                    <td style="background-color:#FFCDD2;">@string.Format("{0:#,##0.###}", Model.ChoanTotalPriceTot)</td>@* 초안등록금액합계 *@
+                                    <td style="background-color:#FFCDD2;">@string.Format("{0:#,##0.###}", Model.AddTotalPriceTot)</td>@* 추가금액[인센티브]합계 *@
+                                    <td style="background-color:#FFCDD2;">@string.Format("{0:#,##0.###}", Model.TotalPriceTot)</td>@* 합계금액 *@
+                                    <td style="background-color:#FFCDD2;">@string.Format("{0:#,##0.###}", Model.SagoPriceTot)</td>@* 차감금액[사고건] *@
+                                    <td style="background-color:#FFCDD2;">@string.Format("{0:#,##0.###}", Model.LastTotalPriceTot)</td>@* 실수령액 *@
+                                    <td style ="background-color:#FFCDD2;">
+                                        @string.Format("{0:#,##0.###}", Model.WeekWorkCntTot)</td>
+                                    <td style="background-color:#FFCDD2;">
+                                        @string.Format("{0:#,##0.###}", Convert.ToInt32(Model.WeekIncenTiveSingleSideCardCntTot + Model.WeekIncenTiveInitialCardCntTot + Model.WeekIncenTiveDoubleSideCardCntTot + Model.WeekIncenTiveLaserCardCntTot))
+                                    </td>
+                                    <td style ="background-color:#FFCDD2;">@string.Format("{0:#,##0.###}", Model.WeekIncenTiveTotalPriceTot)</td>
+                                </tr>
+
+                            </tbody>
+
+                        }
+                       
+                    </table>
+                </div>
+
+            </div>
+        }
+
+        else if (Model.MenuGubun == 1) @* 주문일 - 예식일 *@
+        {
+            <div class="mx-lg-n6  bg-white border-top border-bottom border-200 position-relative top-1" style="width:80%;margin-left:0rem !important;">
+                <div class="table-responsive scrollbar-overlay mx-n1 px-1" data-simplebar="init">
+                    <table class="table table-sm fs--1 mb-0">
+                        <thead>
+                            <tr>
+
+                                <th scope="col">예식일</th>
+                                <th scope="col">주문건수</th>
+                            </tr>
+                            <tr>
+                                <th scope="col">합계</th>
+                                <th scope="col">@Model.EventDateTotalCount</th>
+
+                            </tr>
+                        </thead>
+                        <tbody class="list">
+                            @if (Model.WeddingDataModel.Count == 0)
+                            {
+                                <tr class="hover-actions-trigger btn-reveal-trigger position-static">
+                                    <td colspan="15" style="text-align:center">데이터가 없습니다</td>
+                                </tr>
+                            }
+
+                            @foreach (var item in Model.WeddingDataModel)
+                            {
+
+                                <tr class="hover-actions-trigger btn-reveal-trigger position-static">
+
+                                    <td>
+
+                                        <p class="mb-0 ms-3 text-1100 fw-bold">@item.EventDate</p>
+                                    </td>
+                                    <td>@item.EventDateCount</td>
+
+                                </tr>
+
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        }
+        else if (Model.MenuGubun == 2) @* 초안 등록건수 *@
+        {
+            <div class="mx-lg-n6  bg-white border-top border-bottom border-200 position-relative top-1" style="margin-left:0rem !important;">
+                <div class="table-responsive scrollbar-overlay mx-n1 px-1" data-simplebar="init">
+                    <table class="table table-sm fs--1 mb-0">
+                        <thead>
+                            <tr>
+
+                                <th scope="col" style="width:5%;" rowspan="2">담당자</th>
+                                <th scope="col" style="width:5%;" colspan="4">초안등록</th>
+
+                                <th scope="col" style="width:5%;">초안수정</th>
+                                <th scope="col" style="width:5%;">약도등록</th>
+
+                            </tr>
+                            <tr style="text-align: center;">
+                                <th style="width: 80px;">일반</th>
+                                <th style="width: 80px;">초특급</th>
+                                <th style="width: 80px;">추가</th>
+
+                                <th style="width: 80px;">합계</th>
+
+                                <th style="width: 80px;">수정</th>
+                                <th style="width: 80px;">합계</th>
+                            </tr>
+                        </thead>
+                        <tbody class="list" id="customers-table-body">
+                            @if (Model.ChoanJobDataModel.Count == 0)
+                            {
+                                <tr class="hover-actions-trigger btn-reveal-trigger position-static">
+                                    <td colspan="15" style="text-align:center">데이터가 없습니다</td>
+                                </tr>
+                            }
+
+
+                            @foreach (var item in Model.ChoanJobDataModel)
+                            {
+                                <tr class="hover-actions-trigger btn-reveal-trigger position-static">
+
+                                    <td>
+
+                                        <p class="mb-0 ms-3 text-1100 fw-bold">@item.AdminId</p>
+                                    </td>
+                                    <td>@item.DefaultCnt</td>
+                                    <td>@item.SpecialCnt</td>
+                                    <td>@item.AddCnt</td>
+                                    <td>@item.TotCnt</td>
+                                    <td>@item.ModTotCnt</td>
+                                    <td>@item.WeddingTotCnt</td>
+
+                                </tr>
+                            }
+                            <tr class="hover-actions-trigger btn-reveal-trigger position-static">
+
+                                <td>
+
+                                    <p class="mb-0 ms-3 text-1100 fw-bold">합계</p>
+                                </td>
+                                <td>@Model.ChoanJobDefaultTot</td>
+                                <td>@Model.ChoanJobSpecialTot</td>
+                                <td>@Model.ChoanJobAddTot</td>
+                                <td>@Model.ChoanJobTot</td>
+                                <td>@Model.ChoanJobModTot</td>
+                                <td>@Model.ChoanJobWeddTot</td>
+
+                            </tr>
+
+
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+
+        }
+        else
+        {
+            <div class="mx-lg-n6  bg-white border-top border-bottom border-200 position-relative top-1" style="margin-left:0rem !important;">
+                <div class="table-responsive scrollbar-overlay mx-n1 px-1" data-simplebar="init">
+                    <table class="table table-sm fs--1 mb-0">
+                        <thead>
+                            <tr>
+
+                                <th scope="col" style="width:5%;">작업자명</th>
+                                <th scope="col" style="width:5%;">일반청첩장</th>
+
+                                <th scope="col" style="width:5%;">포토</th>
+                                <th scope="col" style="width:5%;">박카드</th>
+
+                                <th style="width: 80px;">양면</th>
+                                <th style="width: 80px;">레이저</th>
+                                <th style="width: 80px;">답례장</th>
+
+                                <th style="width: 80px;">추가주문(기존)</th>
+
+                                <th style="width: 80px;">추가주문(수정)</th>
+                                <th style="width: 80px;">합계</th>
+                            </tr>
+                        </thead>
+                        <tbody class="list" id="customers-table-body">
+                            @if (Model.ChoanJobCardDataModel.Count == 0)
+                            {
+                                <tr class="hover-actions-trigger btn-reveal-trigger position-static">
+                                    <td colspan="15" style="text-align:center">데이터가 없습니다</td>
+                                </tr>
+                            }
+
+
+                            @foreach (var item in Model.ChoanJobCardDataModel)
+                            {
+                                <tr class="hover-actions-trigger btn-reveal-trigger position-static">
+
+                                    <td class="customer align-middle white-space-nowrap pe-5">
+
+                                        <p class="mb-0 ms-3 text-1100 fw-bold">@item.AdminName</p>
+                                    </td>
+                                    <td>@item.SingleSideCard</td>
+                                    <td>@item.PhotoCard</td>
+                                    <td>@item.InitialCard</td>
+                                    <td>@item.DoubleSideCard</td>
+                                    <td>@item.LaserCard</td>
+                                    <td>@item.RespectCard</td>
+                                    <td>@item.AddOrderOriginal</td>
+                                    <td>@item.AddOrderEdited</td>
+                                    <td>@item.TotalCount</td>
+
+
+                                </tr>
+                            }
+                            <tr class="hover-actions-trigger btn-reveal-trigger position-static">
+
+                                <td class="customer align-middle white-space-nowrap pe-5">
+
+                                    <p class="mb-0 ms-3 text-1100 fw-bold">총계</p>
+                                </td>
+                                <td>@Model.SingleSideCardTot</td>
+                                <td>@Model.PhotoCardTot</td>
+                                <td>@Model.InitialCardCardTot</td>
+                                <td>@Model.DoubleSideCardTot</td>
+                                <td>@Model.LaserCardTot</td>
+                                <td>@Model.RespectCardTot</td>
+                                <td>@Model.AddOrderOriginalTot</td>
+                                <td>@Model.AddOrderEditedTot</td>
+                                <td>@Model.TotalCountTot</td>
+                            </tr>
+
+
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        }
+
+    </form>
+</div>
+
+<footer class="footer position-absolute">
+    <div class="row g-0 justify-content-between align-items-center h-100">
+        <div class="col-12 col-sm-auto text-center">
+            <p class="mb-0 mt-2 mt-sm-0 text-900">
+                빠른손 웹<span class="d-none d-sm-inline-block"></span>
+                <span class="d-none d-sm-inline-block mx-1">|</span><br class="d-sm-none" />2023 &copy;
+            </p>
+        </div>
+
+    </div>
+</footer>
+
+<script>
+    $(".table tr th, .table tr td").addClass("sort white-space-nowrap align-middle pe-3 fontcenter");
+    $(".main .content").css({ "padding-left": "4rem", "padding-right": "5rem" })
+    // $(".main .content").css({ "padding-left": "15.875rem", "padding-right": "20rem"})
+
+    $(".navbar-vertical, .navbar-top").remove();
+    $(".nav-item").eq(parseInt($("#MenuGubun").val())).find("a").addClass("active");
+    window.resizeTo(1500, 900)
+
+    var phoenixIsRTL = window.config.config.phoenixIsRTL;
+    if (phoenixIsRTL) {
+        var linkDefault = document.getElementById('style-default');
+        var userLinkDefault = document.getElementById('user-style-default');
+        linkDefault.setAttribute('disabled', true);
+        userLinkDefault.setAttribute('disabled', true);
+        document.querySelector('html').setAttribute('dir', 'rtl');
+    } else {
+        var linkRTL = document.getElementById('style-rtl');
+        var userLinkRTL = document.getElementById('user-style-rtl');
+        linkRTL.setAttribute('disabled', true);
+        userLinkRTL.setAttribute('disabled', true);
+    }
+</script>

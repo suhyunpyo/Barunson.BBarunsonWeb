@@ -1,0 +1,90 @@
+﻿@using Barunson.BBarunsonWeb.Models
+@{
+    ViewBag.Title = "기타관리 - 공용내지";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+@section Styles{
+    <!-- iCheck -->
+    <link href="/Resources/css/plugins/iCheck/custom.css" rel="stylesheet" />
+    <!-- FooTable -->
+    <link href="/Resources/css/plugins/footable/footable.core.css" rel="stylesheet">
+    <!-- Date Picker -->
+    <link href="/Resources/css/plugins/datapicker/datepicker3.css" rel="stylesheet">
+    <!-- Multi Select Box -->
+    <link href="/Resources/css/plugins/chosen/chosen.css" rel="stylesheet">
+    <!-- Awesome Bootstrap Checkbox -->
+    <link href="/Resources/css/plugins/awesome-bootstrap-checkbox/awesome-bootstrap-checkbox.css" rel="stylesheet">
+    <!-- Switchery -->
+    <link href="/Resources/css/plugins/sweetalert/sweetalert.css" rel="stylesheet">
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.13.2/themes/base/jquery-ui.css">
+    <style>
+        #editfloat {
+            position: fixed;
+            top: 0;
+            margin: 0;
+            width: 100%;
+        }
+
+        .connectedSortable li {
+            padding: 7px;
+            margin: 3px;
+        }
+
+        .sub-title {
+            font-weight: bold;
+            padding-left: 0px;
+        }
+
+        .sub-div {
+            padding: 6px;
+            height: 40px;
+        }
+
+        #sortable1, #sortable2 {
+            border: 1px solid #ddd;
+            padding: 10px;
+            min-height: 20px;
+            list-style-type: none;
+            padding-inline-start: 10px;
+        }
+    </style>
+}
+
+@section Scripts{
+    <!-- iCheck -->
+    <script src="/Resources/js/plugins/iCheck/icheck.min.js"></script>
+    <script src="/Resources/js/plugins/datapicker/bootstrap-datepicker.js"></script>
+    <script src="/Resources/js/plugins/chosen/chosen.jquery.js"></script>
+    <script src="/Resources/js/plugins/inputmask/jquery.inputmask.bundle.min.js"></script>
+    <script src="/Resources/js/plugins/sweetalert/sweetalert.min.js"></script>
+    <script src="/Resources/js/jquery.floatThead.js"></script>
+    <script src="https://code.jquery.com/ui/1.13.2/jquery-ui.js"></script>
+
+    <script>
+        $(document).ready(function (e) {
+
+        });
+    </script>
+}
+
+<div class="row wrapper border-bottom white-bg page-heading none">
+    <div class="col-lg-10">
+        <h2>공용내지</h2>
+        <ol class="breadcrumb">
+            <li>
+                <a href="~/">Home</a>
+            </li>
+            <li>
+                <a>운영 관리</a>
+            </li>
+            <li class="active">
+                <strong>기타관리 - 공용내지</strong>
+            </li>
+        </ol>
+    </div>
+    <div class="col-lg-2">
+
+    </div>
+</div>

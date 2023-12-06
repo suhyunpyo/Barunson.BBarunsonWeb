@@ -1,0 +1,266 @@
+﻿@using Barunson.BBarunsonWeb.Models
+
+@model HardcodingInitialViewModel
+
+@{
+    ViewBag.Title = "하드코딩 관리";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@{
+
+}
+
+@section Styles{
+    <style>
+        #editfloat {
+            position: fixed;
+            top: 0;
+            margin: 0;
+            width: 100%;
+        }
+
+        .search-box {
+            position: relative;
+            font-size: .8rem;
+            width: 20rem;
+        }
+
+        .method {
+            display: inline-block;
+            color: #000000;
+            padding:3px;
+            text-align: center;
+            /*font-size: 8pt;*/
+            border-radius: 5px;
+        }
+
+        .cardcode { cursor:pointer;}
+
+        .i_bg_0 { background : #ffffff; color : #333333; }
+        .i_bg_G { background : #cc9900; color : #FFFFFF; }
+        .i_bg_N { background : #eebb66; color : #FFFFFF; }
+        .i_bg_D { background : #dddd22; color : #444444; }
+        .i_bg_B { background : #444444; color : #AAAAAA; }
+        .i_bg_Z { background : #990000; color : #FFFFFF; }
+        .i_bg_E { background : #00ccff; }
+        .i_bg_I { background : #ffffcc; color : #222222; }
+        .i_bg_W { background : #eeeeee; color : #666666; }
+        .i_bg_S { background : #b0c4de; color : #FFFFFF; }
+        .i_bg_H { background : #500000; color : #ffd700; }
+        .i_bg_Y { background : #ddbb44; color : #ffffff; }
+        .i_bg_K { background : #ff77ff; color : #eeeeee; }
+        .i_bg_C { background : #f4a460; color : #a11111; }
+        .i_bg_X { background : #006400; color : #ffffff; }
+        .i_bg_M { background : #cd853f; color : #800000; }
+        .i_bg_T { background : #40e0d0; color : #0000cd; }
+        .i_bg_O { background : #ffaaff; color : #ffffff; }
+        .i_bg_R { background : #c0d4de; color : #000000; }
+        .i_bg_L { background : #08E8DE; color : #006699; }
+    </style>
+}
+
+@section Scripts{
+
+    <script>
+        $(document).ready(function (e) {
+
+            $('.cardcode').on('click', function (e) {
+                var cardCode = $(this).text();
+                var sd = $(this).data('sd');
+                var hg = $(this).data('hg');
+                var sg = $(this).data('sg');
+
+                $('#CardCode').val(cardCode);
+                $('#strCardCode').text(cardCode);
+
+                var arrayFactory = [sd, hg, sg];
+                var arrayFactoryName = ["sd", "hg", "sg"];
+
+                for (var i = 0; i < arrayFactory.length; i++) {
+                    if (arrayFactory[i] == "Y") {
+                        $('#factory_' + arrayFactoryName[i]).prop("checked", "checked");
+                    }
+                    else {
+                        $('#factory_' + arrayFactoryName[i]).removeProp("checked");
+                    }
+                }
+
+                var options = {backdrop:'static', focus:true, keyboard: false};
+                var myModalAlternative = new bootstrap.Modal('#editModal', options);
+                myModalAlternative.show();
+            });
+
+            $('#btnSave').on('click', function (e) {
+                var option = {
+                    url: '/HardcodingList/UpdateInitial',
+                    method: 'post',
+                    data: $("#frmSave").serialize(),
+                    success: function (res) {
+                        alert('변경되었습니다.');
+                        location.reload();
+                    },
+                    error: function (res) {
+                        alert('변경되지 않았습니다.');
+                    }
+                };
+                $.ajax(option);
+            });
+
+            $('.itemedit').css('height', $('.itemlist').css('height'));
+        });
+
+        $('#card_code_filter').on('keyup', function (e) {
+            var txt = $(this).val();
+            var txt = txt.toLowerCase();
+
+            $('.cardcode').each(function (e) {
+                var cardCode = $(this).text();
+                cardCode = cardCode.toLowerCase();
+
+                if (cardCode.indexOf(txt) >= 0) {
+                    $(this).parents('tr').show();
+                }
+                else {
+                    $(this).parents('tr').hide();
+                }
+            });
+        });
+
+    </script>
+}
+<nav class="mb-2" aria-label="breadcrumb">
+    <ol class="breadcrumb mb-0">
+        <li class="breadcrumb-item"><a href="#!">빠른손관리</a></li>
+        <li class="breadcrumb-item"><a href="#!">기타관리</a></li>
+        <li class="breadcrumb-item active">박가공업체관리</li>
+    </ol>
+</nav>
+<h2 class="text-bold text-1100 mb-5">박 가공업체 관리</h2>
+<div class="row align-items-center justify-content-between g-3 mb-4">
+    <div class="col col-auto form-check-inline">
+        <div class="search-box form-check-inline">
+            <input class="form-control search-input fuzzy-search search" type="search" id="card_code_filter" placeholder="Search Card Code" aria-label="Search">
+            <span class="fas fa-search search-box-icon"></span>
+        </div>
+    </div>
+    <div class="col-auto">
+        <form name="frmSearch" method="get" class="position-relative" data-bs-toggle="search" data-bs-display="static">
+
+        <div class="form-check form-check-inline" data-original-title="삼성동판" data-toggle="tooltip" data-placement="top">
+            <input class="form-check-input" id="chkSd" name="SdYn" type="checkbox" value="Y" @(Model.Param.SdYn == "Y" ? "checked" : "") />
+                <label for="chkSd" class="form-check-label">
+                삼성동판
+            </label>
+        </div>
+
+        <div class="form-check form-check-inline" data-original-title="현대금박" data-toggle="tooltip" data-placement="top">
+            <input class="form-check-input" id="chkHg" name="HgYn" type="checkbox" value="Y" @(Model.Param.HgYn == "Y" ? "checked" : "") />
+                <label for="chkHg" class="form-check-label">
+                현대금박
+            </label>
+        </div>
+
+        <div class="form-check form-check-inline" data-original-title="삼성금박" data-toggle="tooltip" data-placement="top">
+            <input class="form-check-input" id="chkSg" name="SgYn" type="checkbox" value="Y" @(Model.Param.SgYn == "Y" ? "checked" : "") />
+                <label for="chkSg" class="form-check-label">
+                삼성금박
+            </label>
+        </div>
+
+        <div class="form-check-inline">
+            <button class="btn btn-sm  btn-outline-primary" name="btnSearch" type="submit"><span class="fas fa-search search-box-icon"></span> 검색</button>
+        </div>
+        </form>
+    </div>
+</div>
+
+<div class="mx-n4 mx-lg-n6 px-4 px-lg-6 mb-9 bg-white border-y border-300 mt-2 position-relative top-1">
+
+    <div id="table-list" data-list='{"valueNames":["no","cardcode","pm", "pm1", "pm2", "sduse", "hguse", "sguse", "barunson", "mall", "premier"]}'>
+        <div class="table-responsive itemlist">
+            <table class="table fs--1 mb-0 table-custom">
+                <thead>
+                    <tr>
+                        <th class="text-center min-w50 w50 sort" data-sort="no">#</th>
+                        <th class="text-center min-w100 w100 sort" data-sort="cardcode">카드코드</th>
+                        <th class="text-center min-w100 w100 sort" data-sort="pm">공정</th>
+                        <th class="text-center min-w70 w70 sort" data-sort="pm1">광</th>
+                        <th class="text-center min-w70 w70 sort" data-sort="pm2">압</th>
+                        <th class="text-center min-w70 w70 sort" data-sort="sduse">삼성동판</th>
+                        <th class="text-center min-w70 w70 sort" data-sort="hguse">현대금박</th>
+                        <th class="text-center min-w70 w70 sort" data-sort="sguse">삼성금박</th>
+                        <th class="text-center min-w70 w70 sort" data-sort="barunson">바</th>
+                        <th class="text-center min-w70 w70 sort" data-sort="mall">몰</th>
+                        <th class="text-center min-w70 w70 sort" data-sort="premier">프</th>
+                    </tr>
+                </thead>
+                <tbody class="list">
+                    @{
+                        int count = 1;
+                        foreach (HardcodingInitialModel m in Model.HardcodingList)
+                        {
+                            <tr>
+                                <td class="text-center no">@(count++)</td>
+                                <td class="text-center cardcode text-primary" data-sd="@(m.SdUse)" data-hg="@(m.HgUse)" data-sg="@(m.SgUse)">@(m.CardCode)</td>
+                                <td class="text-center pm"><span class="method i_bg_@(m.Pm)">@(m.PmValue)</span></td>
+                                <td class="text-center pm1">@(m.Pm1)</td>
+                                <td class="text-center pm2">@(m.Pm2)</td>
+                                <td class="text-center sduse">@(m.SdUse == "Y" ? "■" : "")</td>
+                                <td class="text-center hguse">@(m.HgUse == "Y" ? "■" : "")</td>
+                                <td class="text-center sguse">@(m.SgUse == "Y" ? "■" : "")</td>
+                                <td class="text-center barunson">@(m.Barunson)</td>
+                                <td class="text-center mall">@(m.Mall)</td>
+                                <td class="text-center premier">@(m.Premier)</td>
+                            </tr>
+                        }
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+</div>
+
+<div class="modal fade" id="editModal" tabindex="-1" data-bs-backdrop="static" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header bg-light">
+                <h5 class="modal-title" id="editModalLabel">공정수정</h5>
+                <button class="btn p-1" type="button" data-bs-dismiss="modal" aria-label="Close"><span class="fas fa-times fs--1"></span></button>
+            </div>
+            <div class="modal-body p-0">
+                <form name="frmSave" id="frmSave" method="post" action="/Hardcoding/UpdateInitial" style="padding:10px;">
+                    <input type="hidden" name="CardCode" id="CardCode" value="" />
+                    <table class="table" style="vertical-align:middle;">
+                        <tr>
+                            <th class="w100" >카드코드</th>
+                            <td style="text-align:left;" id="strCardCode">BH1234</td>
+                        </tr>
+                        <tr>
+                            <th>업체선택</th>
+                            <td style="padding: 3px;">
+                                <div class="form-check form-check-inline">
+                                    <input class="form-check-input" type="radio" name="Factory" id="factory_sd" value="sd" checked="checked" />
+                                    <label class="form-check-label" for="factory_sd">삼성동판</label>
+                                </div>
+                                <div class="form-check form-check-inline">
+                                    <input class="form-check-input" type="radio" name="Factory" id="factory_hg" value="hg" />
+                                    <label class="form-check-label" for="factory_hg">현대금박</label>
+                                </div>
+                                <div class="form-check form-check-inline">
+                                    <input class="form-check-input" type="radio" name="Factory" id="factory_sg" value="sg" />
+                                    <label class="form-check-label" for="factory_sg">삼성금박</label>
+                                </div>
+                            </td>
+                        </tr>
+                    </table>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-outline-primary" type="button" data-bs-dismiss="modal">닫기</button>
+                <button type="button" class="btn btn-primary" id="btnSave">저장</button>
+            </div>
+        </div>
+    </div>
+</div>

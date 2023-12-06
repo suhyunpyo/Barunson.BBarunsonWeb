@@ -1,0 +1,328 @@
+﻿@model CustomQnaDataModel
+
+@{
+    Layout = null;
+
+    // 브라우저 내부 모달 팝업으로 출력됨.
+}
+<link href="~/vendors/dropzone/dropzone.min.css" rel="stylesheet" />
+@*<div class="modal-content bg-soft overflow-hidden">
+    <div class="modal-header px-6 py-5 border-300 pe-sm-5 px-md-6 dark__bg-1100">
+        <h3 class="text-1000 fw-bolder mb-0">상세 내용</h3>
+        <div class="form-floating">
+            <select class="form-select" asp-for="@Model" asp-items="@Model.DataModel.Select("></select>
+            <label for="adminlist">전체관리자</label>
+        </div>
+
+    </div>*@
+    <div class="modal-body bg-100 px-6 py-0">
+        <div class="row gx-14">
+            <div class="col-12 col-lg-7 border-end-lg border-300">
+                <div class="py-6">
+                    <!--<div class="mb-7">
+                    <div class="d-flex align-items-center mb-3">
+                        <h4 class="text-900 me-3">Description</h4><a class="btn btn-link text-decoration-none p-0" href="#!">
+                        <svg class="svg-inline--fa fa-pen" aria-hidden="true" focusable="false" data-prefix="fas" data-icon="pen" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" data-fa-i2svg=""><path fill="currentColor" d="M362.7 19.32C387.7-5.678 428.3-5.678 453.3 19.32L492.7 58.75C517.7 83.74 517.7 124.3 492.7 149.3L444.3 197.7L314.3 67.72L362.7 19.32zM421.7 220.3L188.5 453.4C178.1 463.8 165.2 471.5 151.1 475.6L30.77 511C22.35 513.5 13.24 511.2 7.03 504.1C.8198 498.8-1.502 489.7 .976 481.2L36.37 360.9C40.53 346.8 48.16 333.9 58.57 323.5L291.7 90.34L421.7 220.3z"></path></svg>-->
+                    <!-- <span class="fa-solid fa-pen"></span> Font Awesome fontawesome.com -->
+                    <!--</a>
+                        </div>
+                        <p class="text-1000 mb-0">The female circus horse-rider is a recurring subject in Chagall’s work. In 1926 the art dealer Ambroise Vollard invited Chagall to make a project based on the circus. They visited Paris’s historic Cirque d’Hiver Bouglione together; Vollard lent Chagall his private box seats. Chagall completed 19 gouaches Chagall’s work. In 1926 the art dealer Ambroise Vollard invited Chagall to make a project based on the circus.</p>
+                    </div>-->
+                    <div class="mb-7">
+                        <h4 class="mb-3"></h4>
+                        <div class="d-flex flex-between-center hover-actions-trigger border-300 py-3 border-top">
+                            <div class="form-check mb-1 mb-md-0 d-flex align-items-center lh-1 min-h-auto">
+                                <h3 class="fw-bold text-1000 fs-0 me-2 mb-0">주문번호</h3>
+                                <p class="mb-0 text-1000 fs--1"> @Model.Order_Seq</p>
+                            </div>
+                            <!--<div class="hover-actions end-0">
+                            <button class="btn btn-sm me-1 fs--2 text-700 px-0 me-3"><svg class="svg-inline--fa fa-pencil" aria-hidden="true" focusable="false" data-prefix="fas" data-icon="pencil" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" data-fa-i2svg=""><path fill="currentColor" d="M421.7 220.3L188.5 453.4L154.6 419.5L158.1 416H112C103.2 416 96 408.8 96 400V353.9L92.51 357.4C87.78 362.2 84.31 368 82.42 374.4L59.44 452.6L137.6 429.6C143.1 427.7 149.8 424.2 154.6 419.5L188.5 453.4C178.1 463.8 165.2 471.5 151.1 475.6L30.77 511C22.35 513.5 13.24 511.2 7.03 504.1C.8198 498.8-1.502 489.7 .976 481.2L36.37 360.9C40.53 346.8 48.16 333.9 58.57 323.5L291.7 90.34L421.7 220.3zM492.7 58.75C517.7 83.74 517.7 124.3 492.7 149.3L444.3 197.7L314.3 67.72L362.7 19.32C387.7-5.678 428.3-5.678 453.3 19.32L492.7 58.75z"></path></svg>-->
+                            <!-- <span class="fa-solid fa-pencil"></span> Font Awesome fontawesome.com -->
+                            <!--</button>
+                            <button class="btn btn-sm text-700 px-0"><svg class="svg-inline--fa fa-xmark fs-0" aria-hidden="true" focusable="false" data-prefix="fas" data-icon="xmark" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512" data-fa-i2svg=""><path fill="currentColor" d="M310.6 361.4c12.5 12.5 12.5 32.75 0 45.25C304.4 412.9 296.2 416 288 416s-16.38-3.125-22.62-9.375L160 301.3L54.63 406.6C48.38 412.9 40.19 416 32 416S15.63 412.9 9.375 406.6c-12.5-12.5-12.5-32.75 0-45.25l105.4-105.4L9.375 150.6c-12.5-12.5-12.5-32.75 0-45.25s32.75-12.5 45.25 0L160 210.8l105.4-105.4c12.5-12.5 32.75-12.5 45.25 0s12.5 32.75 0 45.25l-105.4 105.4L310.6 361.4z"></path></svg>-->
+                            <!-- <span class="fa-solid fa-xmark fs-0"></span> Font Awesome fontawesome.com -->
+                            <!--</button>
+                            </div>-->
+                        </div>
+                    <div class="d-flex flex-between-center hover-actions-trigger border-300 py-3 border-top">
+                        <div class="form-check mb-1 mb-md-0 d-flex align-items-center lh-1 min-h-auto">
+                            <h3 class="fw-bold text-1000 fs-0 me-2 mb-0">고객명</h3>
+                            <div class="form-icon-container">
+                                <div class="form-floating">
+                                    <input class="form-control form-icon-input" id="firstName" type="text" placeholder="First Name" value="@Model.Member_Name">
+                                    <label class="text-700 form-icon-label" for="firstName"></label>
+                                </div><span class="fa-solid fa-user text-900 fs--1 form-icon"></span>
+
+                            </div>
+                        </div>
+                    </div>
+                    <div class="d-flex flex-between-center hover-actions-trigger border-300 py-3 border-top">
+                        <div class="form-check mb-1 mb-md-0 d-flex align-items-center lh-1 min-h-auto">
+                            <h3 class="fw-bold text-1000 fs-0 me-2 mb-0">아이디</h3>
+                            <div class="form-icon-container">
+                                <div class="form-floating">
+                                    <input class="form-control form-icon-input" id="firstName" type="text" placeholder="First Name" value="@Model.Member_Id">
+                                    <label class="text-700 form-icon-label" for="firstName"></label>
+                                </div><span class="fa-solid fa-user text-900 fs--1 form-icon"></span>
+
+                            </div>
+                        </div>
+                    </div>
+
+                       
+                        <div class="d-flex flex-between-center hover-actions-trigger border-300 py-3 border-top border-bottom mb-3">
+                            <div class="form-check mb-1 mb-md-0 d-flex align-items-center lh-1 min-h-auto">
+                                <h3 class="fw-bold text-1000 fs-0 me-2 mb-0">이메일</h3>
+                                <div class="form-icon-container">
+                                    <div class="form-floating">
+                                    <input class="form-control form-icon-input" id="emailSocial" type="email" placeholder="Email"  value="@Model.E_Mail">
+                                        <label class="text-700 form-icon-label" for="emailSocial"></label>
+                                    </div><span class="fa-solid fa-envelope text-900 fs--1 form-icon"></span>
+                                </div>
+                            </div>
+
+                        </div>
+
+
+                        <div class="d-flex flex-between-center hover-actions-trigger border-300 py-3 <!--border-top border-bottom mb-3-->">
+                            <div class="form-check mb-1 mb-md-0 d-flex align-items-center lh-1 min-h-auto">
+                                <h3 class="fw-bold text-1000 fs-0 me-2 mb-0">연락처</h3>
+                                <div class="form-icon-container">
+                                    <div class="form-floating">
+                                        <input class="form-control form-icon-input" id="phone" type="tel" placeholder="Phone" value="@Model.Tel_No" />
+                                        <label class="text-700 form-icon-label" for="phone"></label>
+                                    </div><span class="fa-solid fa-phone text-900 fs--1 form-icon"></span>
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                    <div class="d-flex flex-between-center hover-actions-trigger border-300 py-3 <!--border-top border-bottom mb-3-->">
+                        <div class="form-check mb-1 mb-md-0 d-flex align-items-center lh-1 min-h-auto">
+                            <h3 class="fw-bold text-1000 fs-0 me-2 mb-0">문의유형1</h3>
+                            <div class="form-icon-container">
+                                <div class="form-floating">
+                                    <select class="form-select" asp-for="AdminMentCategory_M" asp-items="@Model.AdminMentCategorys_M"></select>
+                                   
+                                </div>
+                               
+                            </div>
+
+                        </div>
+
+                    </div>
+                      <div class="d-flex flex-between-center hover-actions-trigger border-300 py-3 <!--border-top border-bottom mb-3-->">
+                        <div class="form-check mb-1 mb-md-0 d-flex align-items-center lh-1 min-h-auto">
+                            <h3 class="fw-bold text-1000 fs-0 me-2 mb-0">문의유형2</h3>
+                            <div class="form-icon-container">
+                                <div class="form-floating">
+                                    <select class="form-select" asp-for="AdminMentCategory_S" asp-items="@Model.AdminMentCategorys_S"></select>
+                                  
+                                </div>
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                     @*   <div class="d-flex flex-between-center hover-actions-trigger border-300 py-3 border-top">
+                            <div class="form-check mb-1 mb-md-0 d-flex align-items-center lh-1 min-h-auto">
+                                <h3 class="fw-bold text-1000 fs-0 me-2 mb-0">등록일</h3>
+                                <p class="mb-0 text-1000 fs--1">2023-01-02</p>
+
+                            </div>
+
+                        </div>
+
+*@
+                    </div>
+
+
+                </div>
+            </div>
+            <div class="col-12 col-lg-5">
+                <div class="py-6">
+                <h4 class="mb-4 text-black">고객님이 작성한 제목</h4>
+                 @*   <h5 class="text-1000 mb-2">1</h5>*@
+                <div class="col-12">
+                    <div class="form-floating">
+                    <input class="form-control" id="floatingEventInput" type="text" placeholder="Event title">
+                    <label for="floatingEventInput">Event title</label>
+                  </div>
+
+        @*            <label class="form-label" for="filedOptions">고객님이 작성한 제목</label>*@
+                 @*   <textarea class="form-control" id="filedOptions" placeholder="Description" rows="6"></textarea>*@
+                </div>
+                    <h5 class="text-1000 mb-2">고객님이 작성한 내용</h5>
+                    <div class="flatpickr-input-container mb-4">
+                       <textarea class="form-control" id="filedOptions" placeholder="Description" rows="6"></textarea>
+                </div>
+                    <h5 class="text-1000 mb-2">Reminder</h5>
+                    <div class="flatpickr-input-container mb-4">
+                        <div class="flatpickr-wrapper"><input class="form-control datetimepicker ps-6 flatpickr-input" type="text" placeholder="Reminder" data-options="{&quot;enableTime&quot;:true,&quot;noCalendar&quot;:true,&quot;dateFormat&quot;:&quot;H:i&quot;,&quot;disableMobile&quot;:true,&quot;static&quot;:true}" readonly="readonly"><div class="flatpickr-calendar hasTime noCalendar animate static" tabindex="-1"><div class="flatpickr-time" tabindex="-1"><div class="numInputWrapper"><input class="numInput flatpickr-hour" type="number" aria-label="Hour" tabindex="-1" step="1" min="1" max="12" maxlength="2"><span class="arrowUp"></span><span class="arrowDown"></span></div><span class="flatpickr-time-separator">:</span><div class="numInputWrapper"><input class="numInput flatpickr-minute" type="number" aria-label="Minute" tabindex="-1" step="5" min="0" max="59" maxlength="2"><span class="arrowUp"></span><span class="arrowDown"></span></div><span class="flatpickr-am-pm" title="Click to toggle" tabindex="-1">PM</span></div></div></div><span class="uil uil-bell-school flatpickr-icon text-700"></span>
+                    </div>
+                    <h5 class="text-1000 mb-2">Tag</h5>
+                    <div class="choices-select-container mb-6">
+                        <div class="choices" data-type="select-multiple" role="combobox" aria-autocomplete="list" aria-haspopup="true" aria-expanded="false"><div class="choices__inner"><select class="form-select choices__input" data-choices="data-choices" multiple="multiple" data-options="{&quot;removeItemButton&quot;:true,&quot;placeholder&quot;:true}" hidden="" tabindex="-1" data-choice="active"></select><div class="choices__list choices__list--multiple"></div><input type="text" class="choices__input choices__input--cloned" autocomplete="off" autocapitalize="off" spellcheck="false" role="textbox" aria-autocomplete="list" aria-label="Select organizer..." placeholder="Select organizer..." style="min-width: 20ch; width: 1ch;"></div><div class="choices__list choices__list--dropdown" aria-expanded="false"><div class="choices__list" aria-multiselectable="true" role="listbox"><div id="choices--d3lq-item-choice-1" class="choices__item choices__item--choice choices__item--selectable is-highlighted" role="option" data-choice="" data-id="1" data-value="California Institute of Technology" data-select-text="" data-choice-selectable="" aria-selected="true">California Institute of Technology</div><div id="choices--d3lq-item-choice-2" class="choices__item choices__item--choice choices__item--selectable" role="option" data-choice="" data-id="2" data-value="GSAS Open Labs At Harvard" data-select-text="" data-choice-selectable="">GSAS Open Labs At Harvard</div><div id="choices--d3lq-item-choice-3" class="choices__item choices__item--choice choices__item--selectable" role="option" data-choice="" data-id="3" data-value="Massachusetts Institute of Technology" data-select-text="" data-choice-selectable="">Massachusetts Institute of Technology</div><div id="choices--d3lq-item-choice-5" class="choices__item choices__item--choice choices__item--selectable" role="option" data-choice="" data-id="5" data-value="University of Chicago" data-select-text="" data-choice-selectable="">University of Chicago</div></div></div></div><span class="uil uil-tag-alt choices-icon text-700" style="top: 26%;"></span>
+                    </div>
+                    <div class="mb-3">
+                        <div>
+                            <h4 class="mb-3">사용자 첨부파일리스트</h4>
+                        </div>
+                        <div class="border-top border-300 px-0 pt-4 pb-3">
+                            <div class="me-n3">
+                                <div class="d-flex flex-between-center">
+                                    <div class="d-flex mb-1">
+                                        <span class="fa-solid fa-image me-2 text-700 fs--1"></span>
+                                        <p class="text-1000 mb-0 lh-1">Silly_sight_1.png</p>
+                                    </div>
+                                    <div class="font-sans-serif btn-reveal-trigger">
+                                        <button class="btn btn-sm dropdown-toggle dropdown-caret-none transition-none btn-reveal" type="button" data-bs-toggle="dropdown" data-boundary="window" aria-haspopup="true" aria-expanded="false" data-bs-reference="parent"><span class="fas fa-ellipsis-h"></span></button>
+                                        <div class="dropdown-menu dropdown-menu-end py-2"><a class="dropdown-item" href="#!">Edit</a><a class="dropdown-item text-danger" href="#!">Delete</a><a class="dropdown-item" href="#!">Download</a><a class="dropdown-item" href="#!">Report abuse</a></div>
+                                    </div>
+                                </div>
+                                <div class="d-flex fs--1 text-700 mb-2 flex-wrap"><span>768 kb</span><span class="text-400 mx-1">| </span><a href="#!">Shantinan Mekalan </a><span class="text-400 mx-1">| </span><span class="text-nowrap">21st Dec, 12:56 PM</span></div><img class="rounded-2" src="../assets/img/generic/40.png" alt="" style="max-width:230px" />
+                            </div>
+                        </div>
+                        <div class="border-top border-300 px-0 pt-4 pb-3">
+                            <div class="me-n3">
+                                <div class="d-flex flex-between-center">
+                                    <div>
+                                        <div class="d-flex align-items-center mb-1">
+                                            <span class="fa-solid fa-image me-2 fs--1 text-700"></span>
+                                            <p class="text-1000 mb-0 lh-1">All_images.zip</p>
+                                        </div>
+                                        <div class="d-flex fs--1 text-700 mb-0 flex-wrap"><span>12.8 mb</span><span class="text-400 mx-1">| </span><a href="#!">Yves Tanguy </a><span class="text-400 mx-1">| </span><span class="text-nowrap">19th Dec, 08:56 PM</span></div>
+                                    </div>
+                                    <div class="font-sans-serif btn-reveal-trigger">
+                                        <button class="btn btn-sm dropdown-toggle dropdown-caret-none transition-none btn-reveal" type="button" data-bs-toggle="dropdown" data-boundary="window" aria-haspopup="true" aria-expanded="false" data-bs-reference="parent"><span class="fas fa-ellipsis-h"></span></button>
+                                        <div class="dropdown-menu dropdown-menu-end py-2"><a class="dropdown-item" href="#!">Edit</a><a class="dropdown-item text-danger" href="#!">Delete</a><a class="dropdown-item" href="#!">Download</a><a class="dropdown-item" href="#!">Report abuse</a></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="border-top border-bottom border-300 px-0 pt-4 pb-3">
+                            <div class="me-n3">
+                                <div class="d-flex flex-between-center">
+                                    <div>
+                                        <div class="d-flex align-items-center mb-1 flex-wrap">
+                                            <span class="fa-solid fa-file-lines me-2 fs--1 text-700"></span>
+                                            <p class="text-1000 mb-0 lh-1">Project.txt</p>
+                                        </div>
+                                        <div class="d-flex fs--1 text-700 mb-0 flex-wrap"><span>123 kb</span><span class="text-400 mx-1">| </span><a href="#!">Shantinan Mekalan </a><span class="text-400 mx-1">| </span><span class="text-nowrap">12th Dec, 12:56 PM</span></div>
+                                    </div>
+                                    <div class="font-sans-serif btn-reveal-trigger">
+                                        <button class="btn btn-sm dropdown-toggle dropdown-caret-none transition-none btn-reveal" type="button" data-bs-toggle="dropdown" data-boundary="window" aria-haspopup="true" aria-expanded="false" data-bs-reference="parent"><span class="fas fa-ellipsis-h"></span></button>
+                                        <div class="dropdown-menu dropdown-menu-end py-2">
+                                            <a class="dropdown-item" href="#!">Edit</a><a class="dropdown-item text-danger" href="#!">Delete</a><a class="dropdown-item" href="#!">Download</a><a class="dropdown-item" href="#!">Report abuse</a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                        <div class="mb-3">
+                        <div>
+                            <h4 class="mb-3">담당자 첨부파일리스트</h4>
+                        </div>
+                        <div class="border-top border-300 px-0 pt-4 pb-3">
+                            <div class="me-n3">
+                               
+                                   
+
+                                    <div class="dropzone dropzone-multiple p-0" id="dropzone" data-dropzone="data-dropzone" data-options='{"url":"valid/url","maxFiles":1,"dictDefaultMessage":"Choose or Drop a file here"}'>
+  <div class="fallback">
+    <input type="file" name="file" />
+  </div>
+  <div class="dz-message" data-dz-message="data-dz-message">
+    <div class="dz-message-text"><img class="me-2" src="~/assets/img/icons/cloud-upload.svg" width="25" alt="" />Drop your file here</div>
+  </div>
+  <div class="dz-preview dz-preview-multiple m-0 d-flex flex-column">
+    <div class="d-flex pb-3 border-bottom media px-2">
+      <div class="border border-300 p-2 rounded-2 me-2"><img class="rounded-2 dz-image" src="~/assets/img/icons/file.png" alt="..." data-dz-thumbnail="data-dz-thumbnail" /></div>
+      <div class="flex-1 d-flex flex-between-center">
+        <div>
+          <h6 data-dz-name="data-dz-name"></h6>
+          <div class="d-flex align-items-center">
+            <p class="mb-0 fs--1 text-400 lh-1" data-dz-size="data-dz-size"></p>
+            <div class="dz-progress"><span class="dz-upload" data-dz-uploadprogress=""></span></div>
+          </div><span class="fs--2 text-danger" data-dz-errormessage="data-dz-errormessage"></span>
+        </div>
+        <div class="dropdown font-sans-serif">
+          <button class="btn btn-link text-600 btn-sm dropdown-toggle btn-reveal dropdown-caret-none" type="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+              <span class="fas fa-ellipsis-h"></span></button>
+          <div class="dropdown-menu dropdown-menu-end border py-2"><a class="dropdown-item" href="#!" data-dz-remove="data-dz-remove">Remove File</a></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+                            </div>
+                        </div>
+                        <div class="border-top border-300 px-0 pt-4 pb-3">
+                            <div class="me-n3">
+                                <div class="d-flex flex-between-center">
+                                    <div>
+                                        <div class="d-flex align-items-center mb-1">
+                                            <span class="fa-solid fa-image me-2 fs--1 text-700"></span>
+                                            <p class="text-1000 mb-0 lh-1">All_images.zip</p>
+                                        </div>
+                                        <div class="d-flex fs--1 text-700 mb-0 flex-wrap"><span>12.8 mb</span><span class="text-400 mx-1">| </span><a href="#!">Yves Tanguy </a><span class="text-400 mx-1">| </span><span class="text-nowrap">19th Dec, 08:56 PM</span></div>
+                                    </div>
+                                    <div class="font-sans-serif btn-reveal-trigger">
+                                        <button class="btn btn-sm dropdown-toggle dropdown-caret-none transition-none btn-reveal" type="button" data-bs-toggle="dropdown" data-boundary="window" aria-haspopup="true" aria-expanded="false" data-bs-reference="parent"><span class="fas fa-ellipsis-h"></span></button>
+                                        <div class="dropdown-menu dropdown-menu-end py-2"><a class="dropdown-item" href="#!">Edit</a><a class="dropdown-item text-danger" href="#!">Delete</a><a class="dropdown-item" href="#!">Download</a><a class="dropdown-item" href="#!">Report abuse</a></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="border-top border-bottom border-300 px-0 pt-4 pb-3">
+                            <div class="me-n3">
+                                <div class="d-flex flex-between-center">
+                                    <div>
+                                        <div class="d-flex align-items-center mb-1 flex-wrap">
+                                            <span class="fa-solid fa-file-lines me-2 fs--1 text-700"></span>
+                                            <p class="text-1000 mb-0 lh-1">Project.txt</p>
+                                        </div>
+                                        <div class="d-flex fs--1 text-700 mb-0 flex-wrap"><span>123 kb</span><span class="text-400 mx-1">| </span><a href="#!">Shantinan Mekalan </a><span class="text-400 mx-1">| </span><span class="text-nowrap">12th Dec, 12:56 PM</span></div>
+                                    </div>
+                                    <div class="font-sans-serif btn-reveal-trigger">
+                                        <button class="btn btn-sm dropdown-toggle dropdown-caret-none transition-none btn-reveal" type="button" data-bs-toggle="dropdown" data-boundary="window" aria-haspopup="true" aria-expanded="false" data-bs-reference="parent"><span class="fas fa-ellipsis-h"></span></button>
+                                        <div class="dropdown-menu dropdown-menu-end py-2">
+                                            <a class="dropdown-item" href="#!">Edit</a><a class="dropdown-item text-danger" href="#!">Delete</a><a class="dropdown-item" href="#!">Download</a><a class="dropdown-item" href="#!">Report abuse</a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div><
+
+                   
+                </div>
+            </div>
+        </div>
+    </div>
+@*</div>*@
+<script src="~/vendors/popper/popper.min.js"></script>
+<script src="~/vendors/bootstrap/bootstrap.min.js"></script>
+<script src="~/vendors/anchorjs/anchor.min.js"></script>
+<script src="~/vendors/is/is.min.js"></script>
+<script src="~/vendors/fontawesome/all.min.js"></script>
+<script src="~/vendors/lodash/lodash.min.js"></script>
+<script src="https://polyfill.io/v3/polyfill.min.js?features=window.scroll"></script>
+<script src="~/vendors/list.js/list.min.js"></script>
+<script src="~/vendors/feather-icons/feather.min.js"></script>
+<script src="~/vendors/dayjs/dayjs.min.js"></script>
+<script src="~/assets/js/phoenix.js"></script>
+<script src="~/vendors/echarts/echarts.min.js"></script>
+<script src="~/vendors/leaflet/leaflet.js"></script>
+<script src="~/vendors/leaflet.markercluster/leaflet.markercluster.js"></script>
+<script src="~/vendors/leaflet.tilelayer.colorfilter/leaflet-tilelayer-colorfilter.min.js"></script>
+<script src="~/assets/js/ecommerce-dashboard.js"></script>
+
+<script src="../../vendors/dropzone/dropzone.min.js"></script>

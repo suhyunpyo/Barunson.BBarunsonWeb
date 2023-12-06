@@ -1,0 +1,530 @@
+﻿@model ProductChoanViewModel
+
+@section Styles {
+    <link href="../../vendors/glightbox/glightbox.min.css" rel="stylesheet">
+    <link href="../../vendors/flatpickr/flatpickr.min.css" rel="stylesheet">
+    <link href="../../vendors/choices/choices.min.css" rel="stylesheet">
+    <link href="../../assets/css/theme-rtl.min.css" type="text/css" rel="stylesheet" id="style-rtl">
+    <link href="../../assets/css/theme.min.css" type="text/css" rel="stylesheet" id="style-default">
+    <link href="../../assets/css/user-rtl.min.css" type="text/css" rel="stylesheet" id="user-style-rtl">
+    <link href="../../assets/css/user.min.css" type="text/css" rel="stylesheet" id="user-style-default">
+    <style type="text/css">
+        .goverlay {
+            background: rgba(0,0,0,0.6);
+        }
+    </style>
+}
+
+<nav class="mb-2" aria-label="breadcrumb">
+    <ol class="breadcrumb mb-0">
+        <li class="breadcrumb-item"><a href="#!">주문관리</a></li>
+        <li class="breadcrumb-item active">등록초안관리</li>
+    </ol>
+</nav>
+<form class="mb-9" method="get" asp-action="Index" asp-controller="CustomService" id="frmSearch">
+    <div class="row justify-content-between align-items-end g-3 mb-5">
+        <div class="col-12 col-sm-auto col-xl-8">
+            <h2 class="mb-0">등록초안관리</h2>
+        </div>
+
+    </div>
+    <div class="mt-4">
+        <div class="row g-4">
+            <div class="row gx-3 gy-4">
+                
+                <h4 class="fs-1 mt-7">카드내지인쇄</h4>
+                <div class="col-sm-6 col-md-3">
+                    <div class="form-floating">
+                        <button class="btn btn-primary px-5 me-2" style="font-size:1rem">초안 삭제</button>
+                    </div>
+                </div>
+                <div class="col-sm-6 col-md-3">
+                    <div class="d-flex" style="width:70%;height: 100%;">
+                        <button class="btn btn-primary px-5 me-2" style="font-size:1rem">초안 인쇄</button>
+                    </div>
+                </div>
+                <div class="col-sm-6 col-md-3">
+                    <div class="d-flex" style="width:70%;height: 100%;">
+                        <label class="form-check-label">초안등록:2023-11-17</label>
+                    </div>
+                </div>
+               
+                <div class="col-sm-6 col-md-12 mt-md-0 mt-lg-1">
+                    <div class="card shadow-none border border-300 mb-3" data-component-card="data-component-card">
+                        <div id="tableExample2">
+                            @* <div id="tableExample2" data-list='{"valueNames":["sort","orderseq","title"],"page":5,"pagination":{"innerWindow":2,"left":1,"right":1}}'>*@
+                            <div class="p-4 code-to-copy">
+                                <table class="table">
+                                    
+                                    <tbody class="list">
+
+                                        <tr class="choan-list">
+                                            <td class="align-middle white-space-nowrap text-end pe-0">
+                                                <div class="row g-3">
+                                                    <div class="col-4">
+                                                        <a href="https://dev-officefile.barunsoncard.com/preview/202311/02/12884640.jpg" data-gallery="gallery-posts-0">
+                                                            <img class="w-100" src="https://dev-officefile.barunsoncard.com/preview/202311/02/12884640.jpg">
+                                                        </a>
+                                                    </div>
+                                                </div>
+                                            </td>
+                                        </tr>
+
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-sm-6 col-md-12 mt-md-0 mt-lg-1">
+                    <div class="table-responsive scrollbar mx-n1 px-1">
+                        <table class="table fs--1 mb-0">
+
+                            <thead>
+                                <tr>
+                                    <th class="white-space-nowrap fs--1 align-middle ps-0" style="max-width:20px; width:18px;">
+                                        <div class="form-check mb-0 fs-0">
+                                            <input class="form-check-input" id="checkbox-bulk-products-select" type="checkbox" data-bulk-select="{&quot;body&quot;:&quot;products-table-body&quot;}">
+                                        </div>
+                                    </th>
+                                    <th class="sort white-space-nowrap align-middle" scope="col" style="width:20px;" data-sort="number">번호</th>
+                                    <th class="sort align-middle text-end" scope="col" data-sort="gubun" style="width:100px;">구분</th>
+                                    <th class="sort align-middle ps-4" scope="col" data-sort="jehu" style="width:150px;">제휴</th>
+                                    <th class="sort align-middle ps-3" scope="col" data-sort="regdate" style="width:250px;">접수일</th>
+                                    <th class="sort align-middle fs-0 text-center ps-4" scope="col" style="width:125px;">고객명</th>
+                                    <th class="sort align-middle ps-4" scope="col" style="width:200px;">제목</th>
+                                    <th class="sort align-middle ps-4" scope="col" style="width:50px;">처리일</th>
+                                    <th class="sort text-end align-middle pe-0 ps-4" scope="col">답변자</th>
+                                    <th class="sort text-end align-middle pe-0 ps-4" scope="col">질문1</th>
+                                    <th class="sort text-end align-middle pe-0 ps-4" scope="col">질문2</th>
+                                    <th class="sort text-end align-middle pe-0 ps-4" scope="col">카드코드</th>
+                                    <th class="sort text-end align-middle pe-0 ps-4" scope="col">제휴사</th>
+                                </tr>
+                            </thead>
+                            <tbody class="list" id="products-table-body">
+                               
+                                <tr class="position-static  cursor-pointer" data-bs-toggle="modal" data-bs-target="#exampleModal">
+                                    <td class="fs--1 align-middle">
+                                        <div class="form-check mb-0 fs-0">
+                                            <input class="form-check-input" type="checkbox" data-bulk-select-row="{&quot;product&quot;:&quot;Fitbit Sense Advanced Smartwatch with Tools for Heart Health, Stress Management &amp; Skin Temperature Trends, Carbon/Graphite, One Size (S &amp; L Bands...&quot;,&quot;productImage&quot;:&quot;/products/1.png&quot;,&quot;price&quot;:&quot;$39&quot;,&quot;category&quot;:&quot;Plants&quot;,&quot;tags&quot;:[&quot;Health&quot;,&quot;Exercise&quot;,&quot;Discipline&quot;,&quot;Lifestyle&quot;,&quot;Fitness&quot;],&quot;star&quot;:false,&quot;vendor&quot;:&quot;Blue Olive Plant sellers. Inc&quot;,&quot;publishedOn&quot;:&quot;Nov 12, 10:45 PM&quot;}">
+                                        </div>
+                                    </td>
+
+                                    <td class="product align-middle">634374</td>
+                                    <td class="price align-middle white-space-nowrap text-end fw-bold text-700 ps-4">BM</td>
+                                    <td class="category align-middle white-space-nowrap text-600 fs--1 ps-4 fw-semi-bold">모바일초대장</td>
+                                    <td class="tags align-middle review pb-2 ps-3" style="min-width:225px;">
+                                        11/28/2023 4:50:55 PM
+                                    </td>
+                                    <td class="align-middle review fs-0 text-center">
+                                        시스템테스트
+                                        <!--<div class="d-toggle-container">
+                                        <div class="d-block-hover"><svg class="svg-inline--fa fa-star text-warning" aria-hidden="true" focusable="false" data-prefix="fas" data-icon="star" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512" data-fa-i2svg=""><path fill="currentColor" d="M381.2 150.3L524.9 171.5C536.8 173.2 546.8 181.6 550.6 193.1C554.4 204.7 551.3 217.3 542.7 225.9L438.5 328.1L463.1 474.7C465.1 486.7 460.2 498.9 450.2 506C440.3 513.1 427.2 514 416.5 508.3L288.1 439.8L159.8 508.3C149 514 135.9 513.1 126 506C116.1 498.9 111.1 486.7 113.2 474.7L137.8 328.1L33.58 225.9C24.97 217.3 21.91 204.7 25.69 193.1C29.46 181.6 39.43 173.2 51.42 171.5L195 150.3L259.4 17.97C264.7 6.954 275.9-.0391 288.1-.0391C300.4-.0391 311.6 6.954 316.9 17.97L381.2 150.3z"></path></svg>-->
+                                        <!-- <span class="fas fa-star text-warning"></span> Font Awesome fontawesome.com -->
+                                        <!--</div>
+                                        <div class="d-none-hover"><svg class="svg-inline--fa fa-star text-warning" aria-hidden="true" focusable="false" data-prefix="far" data-icon="star" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512" data-fa-i2svg=""><path fill="currentColor" d="M287.9 0C297.1 0 305.5 5.25 309.5 13.52L378.1 154.8L531.4 177.5C540.4 178.8 547.8 185.1 550.7 193.7C553.5 202.4 551.2 211.9 544.8 218.2L433.6 328.4L459.9 483.9C461.4 492.9 457.7 502.1 450.2 507.4C442.8 512.7 432.1 513.4 424.9 509.1L287.9 435.9L150.1 509.1C142.9 513.4 133.1 512.7 125.6 507.4C118.2 502.1 114.5 492.9 115.1 483.9L142.2 328.4L31.11 218.2C24.65 211.9 22.36 202.4 25.2 193.7C28.03 185.1 35.5 178.8 44.49 177.5L197.7 154.8L266.3 13.52C270.4 5.249 278.7 0 287.9 0L287.9 0zM287.9 78.95L235.4 187.2C231.9 194.3 225.1 199.3 217.3 200.5L98.98 217.9L184.9 303C190.4 308.5 192.9 316.4 191.6 324.1L171.4 443.7L276.6 387.5C283.7 383.7 292.2 383.7 299.2 387.5L404.4 443.7L384.2 324.1C382.9 316.4 385.5 308.5 391 303L476.9 217.9L358.6 200.5C350.7 199.3 343.9 194.3 340.5 187.2L287.9 78.95z"></path></svg>-->
+                                        <!-- <span class="far fa-star text-warning"></span> Font Awesome fontawesome.com -->
+                                        <!--</div>
+                                        </div>-->
+                                    </td>
+                                    <td class="vendor align-middle text-start fw-semi-bold ps-4"> 3123</td>
+                                    <td class="time align-middle white-space-nowrap text-600 ps-4"></td>
+                                    <td class="align-middle white-space-nowrap text-end pe-0 ps-4 btn-reveal-trigger"></td>
+                                    <td class="align-middle review fs-0 text-center ps-4"></td>
+                                    <td class="align-middle review fs-0 text-center ps-4"></td>
+                                    <td class="align-middle review fs-0 text-center ps-4"></td>
+                                    <td class="align-middle review fs-0 text-center ps-4">8070</td>
+                                    <td style="display:none">1</td>
+                                </tr>
+                                <tr class="position-static  cursor-pointer" data-bs-toggle="modal" data-bs-target="#exampleModal">
+                                    <td class="fs--1 align-middle">
+                                        <div class="form-check mb-0 fs-0">
+                                            <input class="form-check-input" type="checkbox" data-bulk-select-row="{&quot;product&quot;:&quot;Fitbit Sense Advanced Smartwatch with Tools for Heart Health, Stress Management &amp; Skin Temperature Trends, Carbon/Graphite, One Size (S &amp; L Bands...&quot;,&quot;productImage&quot;:&quot;/products/1.png&quot;,&quot;price&quot;:&quot;$39&quot;,&quot;category&quot;:&quot;Plants&quot;,&quot;tags&quot;:[&quot;Health&quot;,&quot;Exercise&quot;,&quot;Discipline&quot;,&quot;Lifestyle&quot;,&quot;Fitness&quot;],&quot;star&quot;:false,&quot;vendor&quot;:&quot;Blue Olive Plant sellers. Inc&quot;,&quot;publishedOn&quot;:&quot;Nov 12, 10:45 PM&quot;}">
+                                        </div>
+                                    </td>
+
+                                    <td class="product align-middle">634386</td>
+                                    <td class="price align-middle white-space-nowrap text-end fw-bold text-700 ps-4">SD</td>
+                                    <td class="category align-middle white-space-nowrap text-600 fs--1 ps-4 fw-semi-bold">디얼디어</td>
+                                    <td class="tags align-middle review pb-2 ps-3" style="min-width:225px;">
+                                        11/28/2023 6:38:13 PM
+                                    </td>
+                                    <td class="align-middle review fs-0 text-center">
+                                        권서영
+                                        <!--<div class="d-toggle-container">
+                                        <div class="d-block-hover"><svg class="svg-inline--fa fa-star text-warning" aria-hidden="true" focusable="false" data-prefix="fas" data-icon="star" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512" data-fa-i2svg=""><path fill="currentColor" d="M381.2 150.3L524.9 171.5C536.8 173.2 546.8 181.6 550.6 193.1C554.4 204.7 551.3 217.3 542.7 225.9L438.5 328.1L463.1 474.7C465.1 486.7 460.2 498.9 450.2 506C440.3 513.1 427.2 514 416.5 508.3L288.1 439.8L159.8 508.3C149 514 135.9 513.1 126 506C116.1 498.9 111.1 486.7 113.2 474.7L137.8 328.1L33.58 225.9C24.97 217.3 21.91 204.7 25.69 193.1C29.46 181.6 39.43 173.2 51.42 171.5L195 150.3L259.4 17.97C264.7 6.954 275.9-.0391 288.1-.0391C300.4-.0391 311.6 6.954 316.9 17.97L381.2 150.3z"></path></svg>-->
+                                        <!-- <span class="fas fa-star text-warning"></span> Font Awesome fontawesome.com -->
+                                        <!--</div>
+                                        <div class="d-none-hover"><svg class="svg-inline--fa fa-star text-warning" aria-hidden="true" focusable="false" data-prefix="far" data-icon="star" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512" data-fa-i2svg=""><path fill="currentColor" d="M287.9 0C297.1 0 305.5 5.25 309.5 13.52L378.1 154.8L531.4 177.5C540.4 178.8 547.8 185.1 550.7 193.7C553.5 202.4 551.2 211.9 544.8 218.2L433.6 328.4L459.9 483.9C461.4 492.9 457.7 502.1 450.2 507.4C442.8 512.7 432.1 513.4 424.9 509.1L287.9 435.9L150.1 509.1C142.9 513.4 133.1 512.7 125.6 507.4C118.2 502.1 114.5 492.9 115.1 483.9L142.2 328.4L31.11 218.2C24.65 211.9 22.36 202.4 25.2 193.7C28.03 185.1 35.5 178.8 44.49 177.5L197.7 154.8L266.3 13.52C270.4 5.249 278.7 0 287.9 0L287.9 0zM287.9 78.95L235.4 187.2C231.9 194.3 225.1 199.3 217.3 200.5L98.98 217.9L184.9 303C190.4 308.5 192.9 316.4 191.6 324.1L171.4 443.7L276.6 387.5C283.7 383.7 292.2 383.7 299.2 387.5L404.4 443.7L384.2 324.1C382.9 316.4 385.5 308.5 391 303L476.9 217.9L358.6 200.5C350.7 199.3 343.9 194.3 340.5 187.2L287.9 78.95z"></path></svg>-->
+                                        <!-- <span class="far fa-star text-warning"></span> Font Awesome fontawesome.com -->
+                                        <!--</div>
+                                        </div>-->
+                                    </td>
+                                    <td class="vendor align-middle text-start fw-semi-bold ps-4"> 수령후 검수 과정에서 발견사항</td>
+                                    <td class="time align-middle white-space-nowrap text-600 ps-4">처리중</td>
+                                    <td class="align-middle white-space-nowrap text-end pe-0 ps-4 btn-reveal-trigger">jin</td>
+                                    <td class="align-middle review fs-0 text-center ps-4"></td>
+                                    <td class="align-middle review fs-0 text-center ps-4"></td>
+                                    <td class="align-middle review fs-0 text-center ps-4">DDE006BG</td>
+                                    <td class="align-middle review fs-0 text-center ps-4">7717</td>
+                                    <td style="display:none">1</td>
+                                </tr>
+                              
+                            </tbody>
+                        </table>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+<footer class="footer position-absolute">
+    <div class="row g-0 justify-content-between align-items-center h-100">
+        <div class="col-12 col-sm-auto text-center">
+            <p class="mb-0 mt-2 mt-sm-0 text-900">
+                빠른손 웹<span class="d-none d-sm-inline-block"></span>
+                <span class="d-none d-sm-inline-block mx-1">|</span><br class="d-sm-none" />2023 &copy;
+            </p>
+        </div>
+
+    </div>
+</footer>
+
+
+<div class="support-chat-container" style="display:none">
+    <div class="container-fluid support-chat" style="max-width:54rem; right:0rem">
+        <div class="card bg-white">
+
+            <div class="card-body chat p-0" style="height:100%">
+                <div class="d-flex flex-column-reverse scrollbar h-100 p-3" style="overflow-y: scroll">
+                    <div class="text-center mt-auto">
+                        <img src="" alt="" />@*</div>*@
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <button class="btn p-0 border border-200 btn-support-chat" style="width:15rem; display:none">
+
+        <span class="fs-0 btn-text text-primary text-nowrap">선택한 초안 보기</span>
+        <span class="fa-solid fa-circle text-success fs--1 ms-2"></span><span class="fa-solid fa-chevron-down text-primary fs-1"></span>
+    </button>
+
+</div>
+<div class="modal fade" id="exampleModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-xl">
+        <div class="modal-content bg-soft overflow-hidden">
+            <div class="modal-header px-6 py-5 border-300 pe-sm-5 px-md-6 dark__bg-1100">
+                <h3 class="text-1000 fw-bolder mb-0"></h3>
+                <div class="form-floating">
+                    @* <select class="form-select" asp-for="AdminList" asp-items="@Model.AdminLists"></select> *@
+                    @* <label for="AdminList">담당자를 지정해주세요</label>
+                    <div class="d-flex" style="width:100%;height: 100%;">
+                        <button class="btn btn-primary px-5 me-2" style="font-size:1rem">담당자 지정하기</button>
+                    </div> *@
+                </div>
+
+            </div>
+
+
+            @* <div class="modal-content bg-soft overflow-hidden">
+            <div class="modal-header px-6 py-5 border-300 pe-sm-5 px-md-6 dark__bg-1100">
+            <h3 class="text-1000 fw-bolder mb-0">상세 내용</h3>
+            </div>
+            <div class="modal-body bg-100 px-6 py-0">
+            <div class="row gx-14">
+            <div class="col-12 col-lg-7 border-end-lg border-300">
+            <div class="py-6">
+            <!--<div class="mb-7">
+            <div class="d-flex align-items-center mb-3">
+            <h4 class="text-900 me-3">Description</h4><a class="btn btn-link text-decoration-none p-0" href="#!">
+            <svg class="svg-inline--fa fa-pen" aria-hidden="true" focusable="false" data-prefix="fas" data-icon="pen" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" data-fa-i2svg=""><path fill="currentColor" d="M362.7 19.32C387.7-5.678 428.3-5.678 453.3 19.32L492.7 58.75C517.7 83.74 517.7 124.3 492.7 149.3L444.3 197.7L314.3 67.72L362.7 19.32zM421.7 220.3L188.5 453.4C178.1 463.8 165.2 471.5 151.1 475.6L30.77 511C22.35 513.5 13.24 511.2 7.03 504.1C.8198 498.8-1.502 489.7 .976 481.2L36.37 360.9C40.53 346.8 48.16 333.9 58.57 323.5L291.7 90.34L421.7 220.3z"></path></svg>-->
+            <!-- <span class="fa-solid fa-pen"></span> Font Awesome fontawesome.com -->
+            <!--</a>
+            </div>
+            <p class="text-1000 mb-0">The female circus horse-rider is a recurring subject in Chagall’s work. In 1926 the art dealer Ambroise Vollard invited Chagall to make a project based on the circus. They visited Paris’s historic Cirque d’Hiver Bouglione together; Vollard lent Chagall his private box seats. Chagall completed 19 gouaches Chagall’s work. In 1926 the art dealer Ambroise Vollard invited Chagall to make a project based on the circus.</p>
+            </div>-->
+            <div class="mb-7">
+            <h4 class="mb-3"></h4>
+            <div class="d-flex flex-between-center hover-actions-trigger border-300 py-3 border-top">
+            <div class="form-check mb-1 mb-md-0 d-flex align-items-center lh-1 min-h-auto">
+            <h3 class="fw-bold text-1000 fs-0 me-2 mb-0">주문번호</h3>
+            <p class="mb-0 text-1000 fs--1">2340211</p>
+            </div>
+            <!--<div class="hover-actions end-0">
+            <button class="btn btn-sm me-1 fs--2 text-700 px-0 me-3"><svg class="svg-inline--fa fa-pencil" aria-hidden="true" focusable="false" data-prefix="fas" data-icon="pencil" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" data-fa-i2svg=""><path fill="currentColor" d="M421.7 220.3L188.5 453.4L154.6 419.5L158.1 416H112C103.2 416 96 408.8 96 400V353.9L92.51 357.4C87.78 362.2 84.31 368 82.42 374.4L59.44 452.6L137.6 429.6C143.1 427.7 149.8 424.2 154.6 419.5L188.5 453.4C178.1 463.8 165.2 471.5 151.1 475.6L30.77 511C22.35 513.5 13.24 511.2 7.03 504.1C.8198 498.8-1.502 489.7 .976 481.2L36.37 360.9C40.53 346.8 48.16 333.9 58.57 323.5L291.7 90.34L421.7 220.3zM492.7 58.75C517.7 83.74 517.7 124.3 492.7 149.3L444.3 197.7L314.3 67.72L362.7 19.32C387.7-5.678 428.3-5.678 453.3 19.32L492.7 58.75z"></path></svg>-->
+            <!-- <span class="fa-solid fa-pencil"></span> Font Awesome fontawesome.com -->
+            <!--</button>
+            <button class="btn btn-sm text-700 px-0"><svg class="svg-inline--fa fa-xmark fs-0" aria-hidden="true" focusable="false" data-prefix="fas" data-icon="xmark" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512" data-fa-i2svg=""><path fill="currentColor" d="M310.6 361.4c12.5 12.5 12.5 32.75 0 45.25C304.4 412.9 296.2 416 288 416s-16.38-3.125-22.62-9.375L160 301.3L54.63 406.6C48.38 412.9 40.19 416 32 416S15.63 412.9 9.375 406.6c-12.5-12.5-12.5-32.75 0-45.25l105.4-105.4L9.375 150.6c-12.5-12.5-12.5-32.75 0-45.25s32.75-12.5 45.25 0L160 210.8l105.4-105.4c12.5-12.5 32.75-12.5 45.25 0s12.5 32.75 0 45.25l-105.4 105.4L310.6 361.4z"></path></svg>-->
+            <!-- <span class="fa-solid fa-xmark fs-0"></span> Font Awesome fontawesome.com -->
+            <!--</button>
+            </div>-->
+            </div>
+            <div class="d-flex flex-between-center hover-actions-trigger border-300 py-3 border-top">
+            <div class="form-check mb-1 mb-md-0 d-flex align-items-center lh-1 min-h-auto">
+            <h3 class="fw-bold text-1000 fs-0 me-2 mb-0">글번호</h3>
+            <p class="mb-0 text-1000 fs--1">600001</p>
+
+            </div>
+            <!--<div class="hover-actions end-0">
+            <button class="btn btn-sm me-1 fs--2 text-700 px-0 me-3"><svg class="svg-inline--fa fa-pencil" aria-hidden="true" focusable="false" data-prefix="fas" data-icon="pencil" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" data-fa-i2svg=""><path fill="currentColor" d="M421.7 220.3L188.5 453.4L154.6 419.5L158.1 416H112C103.2 416 96 408.8 96 400V353.9L92.51 357.4C87.78 362.2 84.31 368 82.42 374.4L59.44 452.6L137.6 429.6C143.1 427.7 149.8 424.2 154.6 419.5L188.5 453.4C178.1 463.8 165.2 471.5 151.1 475.6L30.77 511C22.35 513.5 13.24 511.2 7.03 504.1C.8198 498.8-1.502 489.7 .976 481.2L36.37 360.9C40.53 346.8 48.16 333.9 58.57 323.5L291.7 90.34L421.7 220.3zM492.7 58.75C517.7 83.74 517.7 124.3 492.7 149.3L444.3 197.7L314.3 67.72L362.7 19.32C387.7-5.678 428.3-5.678 453.3 19.32L492.7 58.75z"></path></svg>-->
+            <!-- <span class="fa-solid fa-pencil"></span> Font Awesome fontawesome.com -->
+            <!--</button>
+            <button class="btn btn-sm text-700 px-0"><svg class="svg-inline--fa fa-xmark fs-0" aria-hidden="true" focusable="false" data-prefix="fas" data-icon="xmark" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512" data-fa-i2svg=""><path fill="currentColor" d="M310.6 361.4c12.5 12.5 12.5 32.75 0 45.25C304.4 412.9 296.2 416 288 416s-16.38-3.125-22.62-9.375L160 301.3L54.63 406.6C48.38 412.9 40.19 416 32 416S15.63 412.9 9.375 406.6c-12.5-12.5-12.5-32.75 0-45.25l105.4-105.4L9.375 150.6c-12.5-12.5-12.5-32.75 0-45.25s32.75-12.5 45.25 0L160 210.8l105.4-105.4c12.5-12.5 32.75-12.5 45.25 0s12.5 32.75 0 45.25l-105.4 105.4L310.6 361.4z"></path></svg>-->
+            <!-- <span class="fa-solid fa-xmark fs-0"></span> Font Awesome fontawesome.com -->
+            <!--</button>
+            </div>-->
+            </div>
+            <div class="d-flex flex-between-center hover-actions-trigger border-300 py-3 border-top">
+            <div class="form-check mb-1 mb-md-0 d-flex align-items-center lh-1 min-h-auto">
+            <h3 class="fw-bold text-1000 fs-0 me-2 mb-0">구분</h3>
+            <p class="mb-0 text-1000 fs--1">SB</p>
+
+            </div>
+
+            </div>
+            <div class="d-flex flex-between-center hover-actions-trigger border-300 py-3 border-top">
+            <div class="form-check mb-1 mb-md-0 d-flex align-items-center lh-1 min-h-auto">
+            <h3 class="fw-bold text-1000 fs-0 me-2 mb-0">고객명</h3>
+            <div class="form-icon-container">
+            <div class="form-floating">
+            <input class="form-control form-icon-input" id="firstName" type="text" placeholder="First Name">
+            <label class="text-700 form-icon-label" for="firstName">FIRST NAME</label>
+            </div><span class="fa-solid fa-user text-900 fs--1 form-icon"></span>
+
+            </div>
+            </div>
+            </div>
+
+            <div class="d-flex flex-between-center hover-actions-trigger border-300 py-3 border-top border-bottom mb-3">
+            <div class="form-check mb-1 mb-md-0 d-flex align-items-center lh-1 min-h-auto">
+            <h3 class="fw-bold text-1000 fs-0 me-2 mb-0">Email</h3>
+            <div class="form-icon-container">
+            <div class="form-floating">
+            <input class="form-control form-icon-input" id="emailSocial" type="email" placeholder="Email" />
+            <label class="text-700 form-icon-label" for="emailSocial">ENTER YOUR EMAIL</label>
+            </div><span class="fa-solid fa-envelope text-900 fs--1 form-icon"></span>
+            </div>
+            </div>
+
+            </div>
+
+
+            <div class="d-flex flex-between-center hover-actions-trigger border-300 py-3 <!--border-top border-bottom mb-3-->">
+            <div class="form-check mb-1 mb-md-0 d-flex align-items-center lh-1 min-h-auto">
+            <h3 class="fw-bold text-1000 fs-0 me-2 mb-0">연락처</h3>
+            <div class="form-icon-container">
+            <div class="form-floating">
+            <input class="form-control form-icon-input" id="phone" type="tel" placeholder="Phone" />
+            <label class="text-700 form-icon-label" for="phone">ENTER YOUR PHONE</label>
+            </div><span class="fa-solid fa-phone text-900 fs--1 form-icon"></span>
+            </div>
+
+            </div>
+
+            </div>
+
+            <div class="d-flex flex-between-center hover-actions-trigger border-300 py-3 border-top">
+            <div class="form-check mb-1 mb-md-0 d-flex align-items-center lh-1 min-h-auto">
+            <h3 class="fw-bold text-1000 fs-0 me-2 mb-0">등록일</h3>
+            <p class="mb-0 text-1000 fs--1">2023-01-02</p>
+
+            </div>
+
+            </div>
+
+
+            </div>
+
+
+            </div>
+            </div>
+            <div class="col-12 col-lg-5">
+            <div class="py-6">
+            <h4 class="mb-4 text-black">Others Information</h4>
+            <h5 class="text-1000 mb-2">Status</h5>
+            <select class="form-select mb-4" aria-label="Default select example">
+            <option selected="">Select</option>
+            <option value="1">One</option>
+            <option value="2">Two</option>
+            <option value="3">Three</option>
+            </select>
+            <h5 class="text-1000 mb-2">Due Date</h5>
+            <div class="flatpickr-input-container mb-4">
+            <input class="form-control datetimepicker ps-6 flatpickr-input" type="text" placeholder="Set the due date" data-options="{&quot;disableMobile&quot;:true}" readonly="readonly"><span class="uil uil-calendar-alt flatpickr-icon text-700"></span>
+            </div>
+            <h5 class="text-1000 mb-2">Reminder</h5>
+            <div class="flatpickr-input-container mb-4">
+            <div class="flatpickr-wrapper"><input class="form-control datetimepicker ps-6 flatpickr-input" type="text" placeholder="Reminder" data-options="{&quot;enableTime&quot;:true,&quot;noCalendar&quot;:true,&quot;dateFormat&quot;:&quot;H:i&quot;,&quot;disableMobile&quot;:true,&quot;static&quot;:true}" readonly="readonly"><div class="flatpickr-calendar hasTime noCalendar animate static" tabindex="-1"><div class="flatpickr-time" tabindex="-1"><div class="numInputWrapper"><input class="numInput flatpickr-hour" type="number" aria-label="Hour" tabindex="-1" step="1" min="1" max="12" maxlength="2"><span class="arrowUp"></span><span class="arrowDown"></span></div><span class="flatpickr-time-separator">:</span><div class="numInputWrapper"><input class="numInput flatpickr-minute" type="number" aria-label="Minute" tabindex="-1" step="5" min="0" max="59" maxlength="2"><span class="arrowUp"></span><span class="arrowDown"></span></div><span class="flatpickr-am-pm" title="Click to toggle" tabindex="-1">PM</span></div></div></div><span class="uil uil-bell-school flatpickr-icon text-700"></span>
+            </div>
+            <h5 class="text-1000 mb-2">Tag</h5>
+            <div class="choices-select-container mb-6">
+            <div class="choices" data-type="select-multiple" role="combobox" aria-autocomplete="list" aria-haspopup="true" aria-expanded="false"><div class="choices__inner"><select class="form-select choices__input" data-choices="data-choices" multiple="multiple" data-options="{&quot;removeItemButton&quot;:true,&quot;placeholder&quot;:true}" hidden="" tabindex="-1" data-choice="active"></select><div class="choices__list choices__list--multiple"></div><input type="text" class="choices__input choices__input--cloned" autocomplete="off" autocapitalize="off" spellcheck="false" role="textbox" aria-autocomplete="list" aria-label="Select organizer..." placeholder="Select organizer..." style="min-width: 20ch; width: 1ch;"></div><div class="choices__list choices__list--dropdown" aria-expanded="false"><div class="choices__list" aria-multiselectable="true" role="listbox"><div id="choices--d3lq-item-choice-1" class="choices__item choices__item--choice choices__item--selectable is-highlighted" role="option" data-choice="" data-id="1" data-value="California Institute of Technology" data-select-text="" data-choice-selectable="" aria-selected="true">California Institute of Technology</div><div id="choices--d3lq-item-choice-2" class="choices__item choices__item--choice choices__item--selectable" role="option" data-choice="" data-id="2" data-value="GSAS Open Labs At Harvard" data-select-text="" data-choice-selectable="">GSAS Open Labs At Harvard</div><div id="choices--d3lq-item-choice-3" class="choices__item choices__item--choice choices__item--selectable" role="option" data-choice="" data-id="3" data-value="Massachusetts Institute of Technology" data-select-text="" data-choice-selectable="">Massachusetts Institute of Technology</div><div id="choices--d3lq-item-choice-5" class="choices__item choices__item--choice choices__item--selectable" role="option" data-choice="" data-id="5" data-value="University of Chicago" data-select-text="" data-choice-selectable="">University of Chicago</div></div></div></div><span class="uil uil-tag-alt choices-icon text-700" style="top: 26%;"></span>
+            </div>
+            <div class="mb-3">
+            <div>
+            <h4 class="mb-3">Files</h4>
+            </div>
+            <div class="border-top border-300 px-0 pt-4 pb-3">
+            <div class="me-n3">
+            <div class="d-flex flex-between-center">
+            <div class="d-flex mb-1">
+            <span class="fa-solid fa-image me-2 text-700 fs--1"></span>
+            <p class="text-1000 mb-0 lh-1">Silly_sight_1.png</p>
+            </div>
+            <div class="font-sans-serif btn-reveal-trigger">
+            <button class="btn btn-sm dropdown-toggle dropdown-caret-none transition-none btn-reveal" type="button" data-bs-toggle="dropdown" data-boundary="window" aria-haspopup="true" aria-expanded="false" data-bs-reference="parent"><span class="fas fa-ellipsis-h"></span></button>
+            <div class="dropdown-menu dropdown-menu-end py-2"><a class="dropdown-item" href="#!">Edit</a><a class="dropdown-item text-danger" href="#!">Delete</a><a class="dropdown-item" href="#!">Download</a><a class="dropdown-item" href="#!">Report abuse</a></div>
+            </div>
+            </div>
+            <div class="d-flex fs--1 text-700 mb-2 flex-wrap"><span>768 kb</span><span class="text-400 mx-1">| </span><a href="#!">Shantinan Mekalan </a><span class="text-400 mx-1">| </span><span class="text-nowrap">21st Dec, 12:56 PM</span></div><img class="rounded-2" src="../assets/img/generic/40.png" alt="" style="max-width:230px" />
+            </div>
+            </div>
+            <div class="border-top border-300 px-0 pt-4 pb-3">
+            <div class="me-n3">
+            <div class="d-flex flex-between-center">
+            <div>
+            <div class="d-flex align-items-center mb-1">
+            <span class="fa-solid fa-image me-2 fs--1 text-700"></span>
+            <p class="text-1000 mb-0 lh-1">All_images.zip</p>
+            </div>
+            <div class="d-flex fs--1 text-700 mb-0 flex-wrap"><span>12.8 mb</span><span class="text-400 mx-1">| </span><a href="#!">Yves Tanguy </a><span class="text-400 mx-1">| </span><span class="text-nowrap">19th Dec, 08:56 PM</span></div>
+            </div>
+            <div class="font-sans-serif btn-reveal-trigger">
+            <button class="btn btn-sm dropdown-toggle dropdown-caret-none transition-none btn-reveal" type="button" data-bs-toggle="dropdown" data-boundary="window" aria-haspopup="true" aria-expanded="false" data-bs-reference="parent"><span class="fas fa-ellipsis-h"></span></button>
+            <div class="dropdown-menu dropdown-menu-end py-2"><a class="dropdown-item" href="#!">Edit</a><a class="dropdown-item text-danger" href="#!">Delete</a><a class="dropdown-item" href="#!">Download</a><a class="dropdown-item" href="#!">Report abuse</a></div>
+            </div>
+            </div>
+            </div>
+            </div>
+            <div class="border-top border-bottom border-300 px-0 pt-4 pb-3">
+            <div class="me-n3">
+            <div class="d-flex flex-between-center">
+            <div>
+            <div class="d-flex align-items-center mb-1 flex-wrap">
+            <span class="fa-solid fa-file-lines me-2 fs--1 text-700"></span>
+            <p class="text-1000 mb-0 lh-1">Project.txt</p>
+            </div>
+            <div class="d-flex fs--1 text-700 mb-0 flex-wrap"><span>123 kb</span><span class="text-400 mx-1">| </span><a href="#!">Shantinan Mekalan </a><span class="text-400 mx-1">| </span><span class="text-nowrap">12th Dec, 12:56 PM</span></div>
+            </div>
+            <div class="font-sans-serif btn-reveal-trigger">
+            <button class="btn btn-sm dropdown-toggle dropdown-caret-none transition-none btn-reveal" type="button" data-bs-toggle="dropdown" data-boundary="window" aria-haspopup="true" aria-expanded="false" data-bs-reference="parent"><span class="fas fa-ellipsis-h"></span></button>
+            <div class="dropdown-menu dropdown-menu-end py-2">
+            <a class="dropdown-item" href="#!">Edit</a><a class="dropdown-item text-danger" href="#!">Delete</a><a class="dropdown-item" href="#!">Download</a><a class="dropdown-item" href="#!">Report abuse</a>
+            </div>
+            </div>
+            </div>
+            </div>
+            </div>
+            </div><a class="fw-bold fs--1" href="#!"><span class="fas fa-plus me-1"></span>Add file(s)</a>
+            <div class="text-end mb-9">
+            <button class="btn btn-phoenix-danger">Delete Task</button>
+            </div>
+            </div>
+            </div>
+            </div>
+            </div>
+            </div>*@
+        </div>
+    </div>
+
+</div>
+@section Scripts {
+    <script src="//code.jquery.com/jquery-latest.min.js"></script>
+    <script src="../../vendors/glightbox/glightbox.min.js"> </script>
+    <script src="../../vendors/choices/choices.min.js"></script>
+    <script src="../../vendors/dropzone/dropzone.min.js"></script>
+
+
+
+    <script>
+        $(".navbar-vertical, .navbar-top").remove();
+
+        $(document).ready(function () {
+            $(".choan-list").each(function (index, item) {
+                $(this).find("td:eq(3)").click(function (e) {
+
+                    // ViewChoanTitle($(this).closest("tr"));
+
+                    e.preventDefault();
+
+                });
+            });
+
+             $(".position-static").each(function (index, item) {
+                $(this).click(function (e) {
+                     e.preventDefault();
+
+                   // $("#exampleModal .modal-dialog .modal-content .modal-header .text-1000").html($(this).find("td").eq(5).text() + "님이 올리신 문의글의 담당자를 배분해주세요.")
+
+                    $.ajax({
+                        url: '/CustomQnA/CustomQnaInfo?id=' + $(this).find("td").eq(1).text() + '&IsS2=' + $(this).find("td:last").text(),
+                        method: 'GET'
+                    }).done(function (data, textStatus, jqXHR) {
+                       
+                        var obj = $("#exampleModal .modal-dialog .modal-content");
+
+                        if($(obj).find(".modal-body").length > 0)
+                        {
+                          
+                            $(obj).find(".modal-body").empty().html(data);
+                        }
+                        else
+                        {
+                            $(obj).find(".modal-header").after(data);
+                        }
+
+                      //  $("#exampleModal .modal-dialog .modal-content .modal-header").after(data)
+                        // $("#RefundPop").html(data);
+                        //$("#RefundPop").modal("show");
+                    });
+
+
+                });
+            });
+
+        });
+
+        function ViewChoanTitle(obj) {
+            var order_seq = $(obj).find("td").eq(1).text();
+            var title = $(obj).find("td").eq(2).text();
+            var ment = "<div style=\"color:red;top:10px;position:relative;text-align:center;font-weight:800;font-size:1.953125rem;\">주문번호:" + order_seq + "-" + title + "에 대한 초안이미지 입니다.</div>";
+            $(".gcontainer").prepend(ment);
+
+        }
+        var phoenixIsRTL = window.config.config.phoenixIsRTL;
+        if (phoenixIsRTL) {
+            var linkDefault = document.getElementById('style-default');
+            var userLinkDefault = document.getElementById('user-style-default');
+            linkDefault.setAttribute('disabled', true);
+            userLinkDefault.setAttribute('disabled', true);
+            document.querySelector('html').setAttribute('dir', 'rtl');
+        } else {
+            var linkRTL = document.getElementById('style-rtl');
+            var userLinkRTL = document.getElementById('user-style-rtl');
+            linkRTL.setAttribute('disabled', true);
+            userLinkRTL.setAttribute('disabled', true);
+        }
+
+        @*  <script>
+        var navbarTopStyle = window.config.config.phoenixNavbarTopStyle;
+        var navbarTop = document.querySelector('.navbar-top');
+        if (navbarTopStyle === 'darker') {
+        navbarTop.classList.add('navbar-darker');
+        }
+
+        var navbarVerticalStyle = window.config.config.phoenixNavbarVerticalStyle;
+        var navbarVertical = document.querySelector('.navbar-vertical');
+        if (navbarVertical && navbarVerticalStyle === 'darker') {
+        navbarVertical.classList.add('navbar-darker');
+        }
+        </script>*@
+
+            <!--우측 하단 위젯-- >
+
+    </script>
+}
+

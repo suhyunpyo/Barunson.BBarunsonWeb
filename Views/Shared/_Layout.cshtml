@@ -1,0 +1,217 @@
+﻿<!DOCTYPE html>
+<html lang="ko" dir="ltr">
+
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!-- ===============================================-->
+    <!--    Document Title-->
+    <!-- ===============================================-->
+    <title>@ViewData["Title"]</title>
+
+    <!-- ===============================================-->
+    <!--    Favicons-->
+    <!-- ===============================================-->    
+    <meta name="theme-color" content="#ffffff">
+    <script src="~/vendors/jquery-ui/external/jquery/jquery.js"></script>
+    <script src="~/vendors/jquery-ui/jquery-ui.js"></script>
+    <script src="~/vendors/imagesloaded/imagesloaded.pkgd.min.js"></script>
+    <script src="~/vendors/simplebar/simplebar.min.js"></script>
+    <script src="~/assets/js/config.js"></script>
+
+    <!-- ===============================================-->
+    <!--    Stylesheets-->
+    <!-- ===============================================-->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
+    <link href="https://fonts.googleapis.com/css2?family=Nunito+Sans:wght@300;400;600;700;800;900&amp;display=swap" rel="stylesheet">
+    <link href="~/vendors/simplebar/simplebar.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://unicons.iconscout.com/release/v4.0.8/css/line.css">
+    <link href="~/assets/css/theme.min.css" type="text/css" rel="stylesheet" id="style-default">
+    <link href="~/assets/css/user.min.css" type="text/css" rel="stylesheet" id="user-style-default">
+    <link href="~/css/site.css" type="text/css" rel="stylesheet" asp-append-version="true" />
+
+    @await RenderSectionAsync("Styles", required: false)
+  </head>
+
+<body class="nav-slim">
+    <!-- ===============================================-->
+    <!--    Main Content-->
+    <!-- ===============================================-->
+    <main class="main" id="top">
+      <nav class="navbar navbar-vertical navbar-expand-lg" style="display:inline-block;">        
+        <div class="collapse navbar-collapse" id="navbarVerticalCollapse">
+          <!-- scrollbar removed-->
+          <div class="navbar-vertical-content">
+            <ul class="navbar-nav flex-column" id="navbarVerticalNav">
+              <li class="nav-item">
+                <!-- parent pages-->
+                <div class="nav-item-wrapper"><a class="nav-link dropdown-indicator label-1" href="#nv-home" role="button" data-bs-toggle="collapse" aria-expanded="false" aria-controls="nv-home">
+                    <div class="d-flex align-items-center">
+                      <div class="dropdown-indicator-icon"><span class="fas fa-caret-right"></span></div><span class="nav-link-icon"><span data-feather="pie-chart"></span></span><span class="nav-link-text">Dashboard</span>
+                    </div>
+                  </a>
+                  <div class="parent-wrapper label-1">
+                    <ul class="nav collapse parent" data-bs-parent="#navbarVerticalCollapse" id="nv-home">
+                      <li class="collapsed-nav-item-title d-none">Dashboard</li>
+                      <li class="nav-item"><a class="nav-link" href="/" data-bs-toggle="" aria-expanded="false">
+                          <div class="d-flex align-items-center"><span class="nav-link-text">Home</span></div>
+                        </a><!-- more inner pages-->
+                      </li>                      
+                    </ul>
+                  </div>
+                </div>
+              </li>
+              <li class="nav-item">
+                <!-- label-->
+                <p class="navbar-vertical-label">Pages</p>
+                <hr class="navbar-vertical-line" /><!-- parent pages-->
+                <div class="nav-item-wrapper"><a class="nav-link dropdown-indicator label-1" href="#nv-e-commerce" role="button" data-bs-toggle="collapse" aria-expanded="false" aria-controls="nv-e-commerce">
+                    <div class="d-flex align-items-center">
+                      <div class="dropdown-indicator-icon"><span class="fas fa-caret-right"></span></div><span class="nav-link-icon"><span data-feather="shopping-cart"></span></span><span class="nav-link-text">빠른손관리</span>
+                    </div>
+                  </a>
+                  <div class="parent-wrapper label-1">
+                    <ul class="nav collapse parent" data-bs-parent="#navbarVerticalCollapse" id="nv-e-commerce">
+                      <li class="collapsed-nav-item-title d-none">빠른손관리</li>
+                      <li class="nav-item"><a class="nav-link dropdown-indicator" href="#nv-admin" data-bs-toggle="collapse" aria-expanded="false" aria-controls="nv-admin">
+                          <div class="d-flex align-items-center">
+                            <div class="dropdown-indicator-icon"><span class="fas fa-caret-right"></span></div><span class="nav-link-text">기타관리</span>
+                          </div>
+                        </a><!-- more inner pages-->
+                        <div class="parent-wrapper">
+                          <ul class="nav collapse parent show" data-bs-parent="#e-commerce" id="nv-admin">
+                            <li class="nav-item"><a class="nav-link" href="/HardcodingList/" data-bs-toggle="" aria-expanded="false">
+                              <div class="d-flex align-items-center"><span class="nav-link-text">박가공업체관리</span></div>
+                              </a><!-- more inner pages-->
+                            </li>
+                            <li class="nav-item"><a class="nav-link" asp-controller="HardcodingList" asp-action="AuthManage" asp-route-type="AUTH_TRUBLE" data-bs-toggle="" aria-expanded="false">
+                                <div class="d-flex align-items-center"><span class="nav-link-text">사고건수정권한</span></div>
+                              </a><!-- more inner pages-->
+                            </li>                            
+                            <li class="nav-item"><a class="nav-link" asp-controller="HardcodingList" asp-action="AuthManage" asp-route-type="AUTH_CLOSECOPY" data-bs-toggle="" aria-expanded="false">
+                                <div class="d-flex align-items-center"><span class="nav-link-text">마감담당권한</span></div>
+                              </a><!-- more inner pages-->
+                            </li>                            
+                            <li class="nav-item"><a class="nav-link" asp-controller="HardcodingList" asp-action="AuthManage" asp-route-type="AUTH_OUTSOURCING_DEL" data-bs-toggle="" aria-expanded="false">
+                                <div class="d-flex align-items-center"><span class="nav-link-text">외주주문삭제권한</span></div>
+                              </a><!-- more inner pages-->
+                            </li>                            
+                            <li class="nav-item"><a class="nav-link" asp-controller="HardcodingList" asp-action="DigitalParts" asp-route-type="DigitalCardCode" data-bs-toggle="" aria-expanded="false">
+                                <div class="d-flex align-items-center"><span class="nav-link-text">디지털병합부속</span></div>
+                              </a><!-- more inner pages-->
+                            </li>                            
+                            <li class="nav-item"><a class="nav-link" asp-controller="HardcodingList" asp-action="DigitalParts" asp-route-type="DigitalCardExclude" data-bs-toggle="" aria-expanded="false">
+                                <div class="d-flex align-items-center"><span class="nav-link-text">디지털병합제외</span></div>
+                              </a><!-- more inner pages-->
+                            </li>                            
+                            <li class="nav-item"><a class="nav-link" asp-controller="Util" asp-action="TossPayment" data-bs-toggle="" aria-expanded="false">
+                                <div class="d-flex align-items-center"><span class="nav-link-text">결제조회</span></div>
+                              </a><!-- more inner pages-->
+                            </li>                            
+                            <li class="nav-item"><a class="nav-link" href="/" data-bs-toggle="" aria-expanded="false">
+                                <div class="d-flex align-items-center"><span class="nav-link-text">소분류2</span></div>
+                              </a><!-- more inner pages-->
+                            </li>                            
+                          </ul>
+                        </div>
+                      </li>
+                      <li class="nav-item">
+                        <a class="nav-link dropdown-indicator" href="#nv-customer" data-bs-toggle="collapse" aria-expanded="false" aria-controls="nv-customer">
+                          <div class="d-flex align-items-center">
+                            <div class="dropdown-indicator-icon"><span class="fas fa-caret-right"></span></div><span class="nav-link-text">중분류2</span>
+                          </div>
+                        </a><!-- more inner pages-->
+                        <div class="parent-wrapper">
+                          <ul class="nav collapse parent show" data-bs-parent="#e-commerce" id="nv-customer">
+                            <li class="nav-item"><a class="nav-link" href="/" data-bs-toggle="" aria-expanded="false">
+                                <div class="d-flex align-items-center"><span class="nav-link-text">소분류3</span></div>
+                              </a><!-- more inner pages-->
+                            </li>
+                            <li class="nav-item"><a class="nav-link" href="/" data-bs-toggle="" aria-expanded="false">
+                                                            <div class="d-flex align-items-center"><span class="nav-link-text">소분류4</span></div>
+                              </a><!-- more inner pages-->
+                            </li>                            
+                          </ul>
+                        </div>
+                      </li>
+                    </ul>
+                  </div>
+                </div><!-- parent pages-->                
+                <div class="nav-item-wrapper"><a class="nav-link dropdown-indicator label-1" href="#nv-CRM" role="button" data-bs-toggle="collapse" aria-expanded="false" aria-controls="nv-CRM">
+                    <div class="d-flex align-items-center">
+                      <div class="dropdown-indicator-icon"><span class="fas fa-caret-right"></span></div><span class="nav-link-icon"><span data-feather="phone"></span></span><span class="nav-link-text">기타</span>
+                    </div>
+                  </a>
+                  <div class="parent-wrapper label-1">
+                    <ul class="nav collapse parent" data-bs-parent="#navbarVerticalCollapse" id="nv-CRM">
+                      <li class="collapsed-nav-item-title d-none">기타
+                      </li>
+                      <li class="nav-item"><a class="nav-link" href="/CustomOrderView/" data-bs-toggle="" aria-expanded="false">
+                          <div class="d-flex align-items-center"><span class="nav-link-text">청첩장 자세히 보기</span>
+                          </div>
+                        </a>
+                        <!-- more inner pages-->
+                      </li>                      
+                    </ul>
+                  </div>
+                </div>
+              </li>              
+            </ul>
+          </div>
+        </div>
+        <div class="navbar-vertical-footer"><button class="btn navbar-vertical-toggle border-0 fw-semi-bold w-100 white-space-nowrap d-flex align-items-center"><span class="uil uil-left-arrow-to-left fs-0"></span><span class="uil uil-arrow-from-right fs-0"></span><span class="navbar-vertical-footer-text ms-2">Collapsed View</span></button></div>
+      </nav>      
+      <nav class="navbar navbar-top navbar-slim fixed-top navbar-expand" id="topNavSlim" style="display:block">
+        <div class="collapse navbar-collapse justify-content-between">
+          <div class="navbar-logo">
+            <button class="btn navbar-toggler navbar-toggler-humburger-icon hover-bg-transparent" type="button" data-bs-toggle="collapse" data-bs-target="#navbarVerticalCollapse" aria-controls="navbarVerticalCollapse" aria-expanded="false" aria-label="Toggle Navigation"><span class="navbar-toggle-icon"><span class="toggle-line"></span></span></button>
+            <a class="navbar-brand navbar-brand" href="/">빠른손 웹</a>
+          </div>
+          <ul class="navbar-nav navbar-nav-icons flex-row">
+            <li class="nav-item">
+              <div class="theme-control-toggle fa-ion-wait pe-2 theme-control-toggle-slim"><input class="form-check-input ms-0 theme-control-toggle-input" id="themeControlToggle" type="checkbox" data-theme-control="phoenixTheme" value="dark" /><label class="mb-0 theme-control-toggle-label theme-control-toggle-light" for="themeControlToggle" data-bs-toggle="tooltip" data-bs-placement="left" title="Switch theme"><span class="icon me-1 d-none d-sm-block" data-feather="moon"></span><span class="fs--1 fw-bold">Dark</span></label><label class="mb-0 theme-control-toggle-label theme-control-toggle-dark" for="themeControlToggle" data-bs-toggle="tooltip" data-bs-placement="left" title="Switch theme"><span class="icon me-1 d-none d-sm-block" data-feather="sun"></span><span class="fs--1 fw-bold">Light</span></label></div>
+            </li>            
+          </ul>
+        </div>
+      </nav>      
+      
+      <script>        
+        var navbarVerticalStyle = window.config.config.phoenixNavbarVerticalStyle;
+        var navbarVertical = document.querySelector('.navbar-vertical');
+        if (navbarVerticalStyle === 'darker') {
+          navbarVertical.classList.add('navbar-darker');
+        }
+      </script>
+      <div class="content">
+        @RenderBody()        
+      </div>      
+    </main><!-- ===============================================-->
+    <!--    End of Main Content-->
+    <!-- ===============================================-->
+
+    <!-- ===============================================-->
+    <!--    JavaScripts-->
+    <!-- ===============================================-->
+    <script src="~/vendors/popper/popper.min.js"></script>
+    <script src="~/vendors/bootstrap/bootstrap.min.js"></script>
+    <script src="~/vendors/anchorjs/anchor.min.js"></script>
+    <script src="~/vendors/is/is.min.js"></script>
+    <script src="~/vendors/fontawesome/all.min.js"></script>
+    <script src="~/vendors/lodash/lodash.min.js"></script>
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=window.scroll"></script>
+    <script src="~/vendors/list.js/list.min.js"></script>
+    <script src="~/vendors/feather-icons/feather.min.js"></script>
+    <script src="~/vendors/dayjs/dayjs.min.js"></script>
+    <script src="~/assets/js/phoenix.js"></script>
+    <script src="~/vendors/echarts/echarts.min.js"></script>
+    <script src="~/vendors/leaflet/leaflet.js"></script>
+    <script src="~/vendors/leaflet.markercluster/leaflet.markercluster.js"></script>
+    <script src="~/vendors/leaflet.tilelayer.colorfilter/leaflet-tilelayer-colorfilter.min.js"></script>
+    <script src="~/assets/js/ecommerce-dashboard.js"></script>
+    @await RenderSectionAsync("Scripts", required: false)
+  </body>
+
+</html>

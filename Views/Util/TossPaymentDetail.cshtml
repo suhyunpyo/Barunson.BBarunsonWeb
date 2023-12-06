@@ -1,0 +1,82 @@
+﻿@using Barunson.BBarunsonWeb.Models
+
+@model PaymentViewModel
+@{
+    if (ViewBag.Layout != null)
+    {
+        Layout = $"~/Views/Shared/_{ViewBag.Layout}Layout.cshtml";
+    }
+    else
+    {
+        Layout = null;
+    }
+}
+
+@if(Model.jsonStr != null)
+{
+    <table class="table" style="font-size:9pt;">
+        <tr><th class="text-center bg-light header">주문유형</th><td>청첩장</td></tr>
+        <tr><th class="text-center bg-light header">주문번호<br />(order_seq)</th><td>@(Model.payment?.orderId.Substring(2))</td></tr>
+        <tr><th class="text-center bg-light header">결제금액<br />(settle_price)</th><td class="fw-bold">@(Model.payment?.totalAmount)</td></tr>
+        <tr><th class="text-center bg-light header">취소금액</th><td class="@(Model.totalCancelAmount > 0 ? "fw-bold text-danger" : "")">@(Model.totalCancelAmount)</td></tr>
+        <tr><th class="text-center bg-light header">결제주문번호<br />(pg_tid)</th><td>@(Model.payment?.orderId)</td></tr>
+        <tr><th class="text-center bg-light header">결제일시<br />(settle_date)</th><td>@(Model.payment?.approvedAt != null && Model.payment.approvedAt.Length > 4 ? Convert.ToDateTime(Model.payment.approvedAt).ToString("yyyy-MM-dd HH:mm:ss", null) + " (" + Model.payment.statusStr + ")" : Model.payment?.statusStr)</td></tr>
+        <tr><th class="text-center bg-light header">상점ID<br />(pg_shopid)</th><td>@(Model.payment?.mId)</td></tr>
+        <tr><th class="text-center bg-light header">결제키<br />(dacom_tid)</th><td>@(Model.payment?.paymentKey)</td></tr>
+        @if (Model.payment.method == "카드")
+        {
+            <!--카드-->
+            <tr><th class="text-center bg-light header">결제방식<br />(settle_method)</th><td>@(Model.payment.method)(2)</td></tr>
+            <tr><th class="text-center bg-light header">결제정보<br />(pg_resultinfo)</th><td>@(Model.cardMap.GetValueOrDefault(Model.payment.card.issuerCode)) @(Model.payment.card.approveNo) </td></tr>
+            <tr><th class="text-center bg-light header">할부<br />(card_nointyn)</th><td>@(Model.payment.card.installmentPlanMonths > 0 ? 1 : 0)</td></tr>
+            <tr><th class="text-center bg-light header">할부개월<br />(card_installmonth)</th><td>@(Model.payment.card.installmentPlanMonths)</td></tr>
+            <tr><th class="text-center bg-light header">결제영수증<br />(ReceiptUrl)</th><td>@(Model.payment.receipt.url)</td></tr>
+            <tr><th class="text-center bg-light header">조회</th><td>@(Model.selectSql)</td></tr>
+            <tr><th class="text-center bg-light header">수정</th><td>@(Model.updateSql)</td></tr>
+        }
+        else if (Model.payment.method == "계좌이체")
+        {
+            <!--계좌이체-->
+            <tr><th class="text-center bg-light header">결제방식<br />(settle_method)</th><td>@(Model.payment.method)(1)</td></tr>
+            <tr><th class="text-center bg-light header">결제정보<br />(pg_resultinfo)</th><td>@(Model.bankMap.GetValueOrDefault(Model.payment.transfer.bankCode))</td></tr>
+            <tr><th class="text-center bg-light header">할부<br />(card_nointyn)</th><td></td></tr>
+            <tr><th class="text-center bg-light header">할부개월<br />(card_installmonth)</th><td></td></tr>
+            <tr><th class="text-center bg-light header">추가정보<br />(pg_resultinfo2)</th><td></td></tr>
+            <tr><th class="text-center bg-light header">결제영수증<br />(ReceiptUrl)</th><td>@(Model.payment.cashReceipt != null ? Model.payment.cashReceipt.receiptUrl : Model.payment.receipt.url))</td></tr>
+            <tr><th class="text-center bg-light header">조회</th><td>@(Model.selectSql)</td></tr>
+            <tr><th class="text-center bg-light header">수정</th><td>@(Model.updateSql)</td></tr>
+        }
+        else if (Model.payment.method == "가상계좌")
+        {
+            <!--가상계좌-->
+            <tr><th class="text-center bg-light header">결제방식<br />(settle_method)</th><td>@(Model.payment.method)(3)</td></tr>
+            <tr><th class="text-center bg-light header">결제정보<br />(pg_resultinfo)</th><td>@(Model.bankMap.GetValueOrDefault(Model.payment.virtualAccount.bankCode)) @(Model.payment.virtualAccount.accountNumber)</td></tr>
+            <tr><th class="text-center bg-light header">할부<br />(card_nointyn)</th><td></td></tr>
+            <tr><th class="text-center bg-light header">할부개월<br />(card_installmonth)</th><td></td></tr>
+            <tr><th class="text-center bg-light header">추가정보<br />(pg_resultinfo2)</th><td>@(Model.payment.virtualAccount.customerName)</td></tr>
+            <tr><th class="text-center bg-light header">결제내역<br />(ReceiptUrl)</th><td>@(Model.payment.cashReceipt != null ? Model.payment.cashReceipt.receiptUrl : Model.payment.receipt.url))</td></tr>
+            <tr><th class="text-center bg-light header">조회</th><td>@(Model.selectSql)</td></tr>
+            <tr><th class="text-center bg-light header">수정</th><td>@(Model.updateSql)</td></tr>
+        }
+        else if (Model.payment.method == "간편결제")
+        {
+            <!--간편결제-->
+            <tr><th class="text-center bg-light header">결제방식<br />(settle_method)</th><td>@(Model.payment.method)(9)</td></tr>
+            <tr><th class="text-center bg-light header">결제정보<br />(pg_resultinfo)</th><td>@(Model.payment.method) @(Model.payment.easyPay.provider)</td></tr>
+            <tr><th class="text-center bg-light header">할부<br />(card_nointyn)</th><td>0</td></tr>
+            <tr><th class="text-center bg-light header">할부개월<br />(card_installmonth)</th><td></td></tr>
+            <tr><th class="text-center bg-light header">추가정보<br />(pg_resultinfo2)</th><td>@(Model.payment.easyPay.provider)</td></tr>
+            <tr><th class="text-center bg-light header">결제영수증<br />(ReceiptUrl)</th><td>@(Model.payment.receipt.url)</td></tr>
+            <tr><th class="text-center bg-light header">조회</th><td>@(Model.selectSql)</td></tr>
+            <tr><th class="text-center bg-light header">수정</th><td>@(Model.updateSql)</td></tr>
+        }
+        <tr><th class="text-center bg-light header">원문데이터<br />(raw)</th><td><span style="width:800px;word-break:break-all;">@(Model.jsonStr)</span></td></tr>
+        <tr><th class="text-center bg-light header">원문데이터<br />(beauty)</th><td><pre style="font-size:9pt;">@(Model.jsonStrBeauty)</pre></td></tr>
+    </table>
+}
+else
+{
+    <table class="table">
+        <tr><td>조회할 수 없습니다.</td></tr>
+    </table>
+}

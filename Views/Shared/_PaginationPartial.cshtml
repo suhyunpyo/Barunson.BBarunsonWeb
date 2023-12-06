@@ -1,0 +1,91 @@
+﻿@model PageViewModel
+@{
+    var ShowPrevious = Model.CurrentPage > Model.PaginationCount;
+
+    var firstPage = (ShowPrevious) ? (int)Math.Ceiling(decimal.Divide((Model.CurrentPage - Model.PaginationCount), Model.PaginationCount)) * Model.PaginationCount + 1 : 1;
+    var lastPage = (int)Math.Ceiling(decimal.Divide(Model.CurrentPage, Model.PaginationCount)) * Model.PaginationCount;
+
+    var ShowNext = true;
+
+    if (lastPage >= Model.TotalPages)
+    {
+        ShowNext = false;
+        lastPage = Model.TotalPages;
+    }
+}
+<div class="row align-items-center justify-content-between py-2 pe-0 fs--1" style="margin: 0px auto;">
+    <div class="dataTables_paginate paging_simple_numbers" id="dataTable_paginate">
+        <ul class="pagination">
+            @if (ShowPrevious)
+            {
+                <li class="page-item">
+                    <a class="page-link" aria-label="Previous"
+                   asp-action="@Model.RouteAction"
+                   asp-all-route-data="@Model.RouteData"
+                   asp-route-CurrentPage="@(firstPage - 1)"
+                   asp-route-PageSize="@Model.PageSize"
+                   asp-route-PaginationCount="@Model.PaginationCount"
+                   asp-controller="@Model.RouteController">
+
+                        <span aria-hidden="true">&laquo;</span>
+                    </a>
+                </li>
+            }
+            else
+            {
+                <li class="page-item disabled">
+                    <span class="page-link" aria-hidden="true">&laquo;</span>
+                </li>
+            }
+
+            @for (var i = firstPage; i <= lastPage; i++)
+            {
+                if (i == Model.CurrentPage)
+                {
+                    <li class="page-item active" aria-current="page">
+                        <span class="page-link">
+                            @i
+                            <span class="sr-only">(current)</span>
+                        </span>
+                    </li>
+                }
+                else
+                {
+                    <li class="page-item">
+                        <a class="page-link" aria-label="@i"
+                   asp-action="@Model.RouteAction"
+                   asp-all-route-data="@Model.RouteData"
+                   asp-route-CurrentPage="@i"
+                   asp-route-PageSize="@Model.PageSize"
+                   asp-route-PaginationCount="@Model.PaginationCount"
+                   asp-controller="@Model.RouteController">
+                            @i
+                        </a>
+                    </li>
+                }
+            }
+
+            @if (ShowNext)
+            {
+                <li class="page-item">
+                    <a class="page-link" aria-label="Next"
+                   asp-action="@Model.RouteAction"
+                   asp-all-route-data="@Model.RouteData"
+                   asp-route-CurrentPage="@(lastPage + 1)"
+                   asp-route-PageSize="@Model.PageSize"
+                   asp-route-PaginationCount="@Model.PaginationCount"
+                   asp-controller="@Model.RouteController">
+                        <span aria-hidden="true">&raquo;</span>
+                    </a>
+                </li>
+            }
+            else
+            {
+                <li class="page-item disabled">
+                    <span class="page-link" aria-hidden="true">&raquo;</span>
+                </li>
+            }
+
+        </ul>
+    </div>
+</div>

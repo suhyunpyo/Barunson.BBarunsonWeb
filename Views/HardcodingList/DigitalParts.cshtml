@@ -1,0 +1,381 @@
+﻿@using Barunson.BBarunsonWeb.Models
+
+@model HardcodingDigitalViewModel
+
+@{
+    ViewBag.Title = Model.DigitalType.Name;
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@section Styles{
+
+    <style>
+        .table {
+            vertical-align : middle;
+        }
+
+        th.header {
+            width : 200px;
+        }
+    </style>
+}
+
+@section Scripts{
+    <script>
+        var emptyVal = {
+            CardCode: '',
+            CardType: '',
+            CardImage: '',
+            HardCode: '',
+            CardKind: 0
+        };
+
+        function viewDetail(card) {
+            $('#CardCode').val(card.cardCode);
+            $('#CardCodeStr').text(card.cardCode);
+            $('#CardTypeStr').text(card.cardType);
+            if (card.cardCode != null) {
+                if (card.hardCode == null) {
+                    $('#HardCodeStr').text('등록가능').css('font-weight', 'bold');
+                }
+                else {
+                    $('#HardCodeStr').text('등록됨').css('font-weight', 'bold').css('color', 'red');
+                }
+                if (card.cardKind == null) {
+                    $('#IsDigitalStr').text("일반");
+                }
+                else {
+                    $('#IsDigitalStr').text("디지털").css('font-weight', 'bold').css('color', 'red');
+                }
+            }
+            else {
+                $('#HardCodeStr').text('');
+                $('#IsDigitalStr').text('');
+            }
+            if (card.cardImage != null && card.cardImage.length > 0) {
+                $('#CardImageStr').html('<img src="http://file.barunsoncard.com/common_img/' + card.cardImage + '" style="width:170px; height:170px;">');
+            }
+            else {
+                $('#CardImageStr').html('');
+            }
+        }
+
+        function viewDetail2(card) {
+            $('#ViewCardCodeStr').text(card.cardCode);
+            $('#ViewCardTypeStr').text(card.cardType);
+            if (card.cardCode != null) {
+                if (card.cardKind == null) {
+                    $('#ViewIsDigitalStr').text("일반");
+                }
+                else {
+                    $('#ViewIsDigitalStr').text("디지털").css('font-weight', 'bold').css('color', 'red');
+                }
+            }
+            else {
+                $('#ViewHardCodeStr').text('');
+                $('#ViewIsDigitalStr').text('');
+            }
+            if (card.cardImage != null && card.cardImage.length > 0) {
+                $('#ViewCardImageStr').html('<img src="http://file.barunsoncard.com/common_img/' + card.cardImage + '" style="width:170px; height:170px;">');
+            }
+            else {
+                $('#ViewCardImageStr').html('');
+            }
+        }
+
+        $('#btnAdd').on('click', function (e) {
+            $('#SearchCardCode').val('');
+
+            viewDetail(emptyVal);
+
+            var options = { backdrop: 'static', focus: true, keyboard: false};
+            var editModal = new bootstrap.Modal('#editModal', options);
+            editModal.show();
+        });
+
+        $('#btnSave').on('click', function (e) {
+
+            var cardcode = $('#CardCode').val();
+
+            if (cardcode.length == 0) {
+                alert('@(Model.DigitalType.Name) 대상 부속품을 먼저 검색해 주세요.');
+                return;
+            }
+
+            if ($('#HardCodeStr').text() == '등록됨') {
+                alert('이미 등록된 부속품입니다.');
+                return;
+            }
+
+            var msg = ' [' + cardcode + '] 부속품을 @(Model.DigitalType.Name) 상품으로 등록하시겠습니까?';
+
+            if ($('#IsDigitalStr').text() == "디지털") {
+                msg = ' [' + cardcode + '] 부속품은 @(Model.DigitalType.Name) 제품으로 등록되어 있습니다. \n그래도 등록하시겠습니까?';
+            }
+
+            if (confirm(msg)) {
+                var option = {
+                    url: $(this).data('action'),
+                    method: 'post',
+                    data: {
+                        'HardId': 'DigitalCardExclude',
+                        'CardCode': cardcode
+                    },
+                    success: function (res) {
+                        alert('등록되었습니다.');
+                        location.reload();
+                    },
+                    error: function (res) {
+                        alert('등록되지 않았습니다.');
+                    }
+                };
+                $.ajax(option);
+            }
+        });
+
+        $('#btnSearch').on('click', function (e) {
+
+            var cardcode = $('#SearchCardCode').val();
+
+            if (cardcode.length == 0) {
+                alert('등록할 부속품을 검색해주세요.');
+                return;
+            }
+
+            var option = {
+                url: $(this).data('action'),
+                data: {
+                    'HardId': '@(Model.DigitalType.Type)',
+                    'CardCode': cardcode
+                },
+                method: 'get',
+                success: function (res) {
+                    if (res.result > 0) {
+                        viewDetail(res.searchCardModel);
+                    }
+                    else {
+                        viewDetail(emptyVal);
+                        alert('검색된 카드가 없습니다.');
+                    }
+                }
+            };
+
+            $.ajax(option);
+        });
+
+        $('.btnRemove').on('click', function (e) {
+            if (confirm('해당 카드를 @(Model.DigitalType.Name)에서 삭제하시겠습니까?')) {
+                var cardcode = $(this).data('card-code');
+
+                var option = {
+                    url: $(this).data('action'),
+                    data: {
+                        'HardId': '@(Model.DigitalType.Type)',
+                        'CardCode': cardcode
+                    },
+                    method: 'post',
+                    success: function (res) {
+                        if (res.result > 0) {
+                            alert('정상삭제되었습니다.');
+                            location.reload();
+                        }
+                        else {
+                            alert('이미 삭제된 거니거나 처리할 수 없는 건입니다.');
+                            location.reload();
+                        }
+                    },
+                    error: function (res) {
+                        alert('삭제 처리중 오류 발생하였습니다.');
+                    }
+                };
+
+                $.ajax(option);
+            }
+        });
+
+        $('.card_detail').on('click', function (e) {
+            var cardcode = $(this).data('card-code');
+
+            var option = {
+                url: $(this).data('action'),
+                data: {
+                    'HardId': '@(Model.DigitalType.Type)',
+                    'CardCode': cardcode
+                },
+                method: 'get',
+                success: function (res) {
+                    if (res.result > 0) {
+                        viewDetail2(res.searchCardModel);
+
+                        var options = { backdrop: true, focus: true, keyboard: false, static: true };
+                        var viewModal = new bootstrap.Modal('#viewModal', options);
+                        viewModal.show();
+                    }
+                }
+            };
+
+            $.ajax(option);
+
+        });
+
+        $('#card_code_filter').on('keyup', function (e) {
+            var txt = $(this).val();
+            var txt = txt.toLowerCase();
+
+            $('.cardcode').each(function (e) {
+                var cardCode = $(this).text();
+                cardCode = cardCode.toLowerCase();
+
+                if (cardCode.indexOf(txt) >= 0) {
+                    $(this).parents('tr').show();
+                }
+                else {
+                    $(this).parents('tr').hide();
+                }
+            });
+        });
+
+
+    </script>
+}
+
+<nav class="mb-2" aria-label="breadcrumb">
+    <ol class="breadcrumb mb-0">
+        <li class="breadcrumb-item"><a href="#!">빠른손관리</a></li>
+        <li class="breadcrumb-item"><a href="#!">기타관리</a></li>
+        <li class="breadcrumb-item active">@(Model.DigitalType.Name)</li>
+    </ol>
+</nav>
+<h2 class="text-bold text-1100 mb-5">@(Model.DigitalType.Name)</h2>
+<div class="row align-items-center justify-content-between g-3 mb-4">
+    <div class="col col-auto form-check-inline">
+        <div class="search-box form-check-inline">
+            <input class="form-control search-input fuzzy-search search" type="search" id="card_code_filter" placeholder="Search Card Code" aria-label="Search">
+            <span class="fas fa-search search-box-icon"></span>
+        </div>
+    </div>
+    <div class="col-auto">
+        <div class="form-check-inline">
+            <button class="btn btn-sm  btn-outline-primary" id="btnAdd" type="button"><span class="fas fa-plus"></span> 추가</button>
+        </div>
+    </div>
+</div>
+
+<div class="mx-n4 mx-lg-n6 px-4 px-lg-6 mb-9 bg-white border-y border-300 mt-2 position-relative top-1">
+
+    <div id="table-list" data-list='{"valueNames":["cardcode","cardtype","status", "digital"]}'>
+        <div class="table-responsive itemlist">
+            <table class="table table-sm fs--1 mb-0 table-custom">
+                <thead>
+                    <tr>
+                        <th class="min-w100 text-center sort" data-sort="cardcode">카드코드</th>
+                        <th class="min-w100 text-center sort" data-sort="cardtype">유형</th>
+                        <th class="min-w100 text-center sort" data-sort="status">상태</th>
+                        <th class="min-w100 text-center sort" data-sort="digital">디지털</th>
+                        <th class="min-w50 text-center">기능</th>
+                    </tr>
+                </thead>
+                <tbody class="list">
+                    @foreach (HardcodingDigitalModel digital in Model.HardcodingDigitalList)
+                    {
+                        <tr class="@(digital.IsDigit == "Y" ? "bg-warning-100" : "" )">
+                            <td class="text-center cardcode"><a href="javascript:void(0);" class="card_detail" data-action="@Url.Action("GetHardcodingSearchCard","HardcodingList")" data-card-code="@(digital.CardCode)">@(digital.CardCode)</a></td>
+                            <td class="text-center cardtype">@(digital.CardType)</td>
+                            <td class="text-center status">@(digital.CardSeq > 0 ? "정상" : "미등록카드")</td>
+                            <td class="text-center digital">@(digital.IsDigit == "Y" ? "●" : "")</td>
+                            <td class="min-w50 text-center"><button type="button" class="btn btn-sm btn-outline-danger btnRemove" data-action="@Url.Action("RemoveHardcodingDigitalCard","HardcodingList")" data-card-code="@(digital.CardCode)"><i class="fa fa-remove"></i> 삭제</button></td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="editModal" tabindex="-1" data-bs-backdrop="static" aria-labelledby="editModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header bg-light">
+                <h5 class="modal-title" id="editModalLabel">카드검색</h5>
+                <button class="btn p-1" type="button" data-bs-dismiss="modal" aria-label="Close"><span class="fas fa-times fs--1"></span></button>
+            </div>
+            <div class="modal-body">
+                <div style="width:100%;">
+                    <div class="input-group" style="width:200px;margin-bottom:10px; float:right;">
+                        <input type="text" class="form-control input-sm" placeholder="Search Card Code" id="SearchCardCode">
+                        <input type="hidden" id="CardCode" value="" />
+                        <span class="input-group-btn" style="margin-left:5px;">
+                            <button class="btn btn-sm btn-outline-primary" type="button" data-action="@Url.Action("GetHardcodingSearchCard","HardcodingList")" id="btnSearch">검색</button>
+                        </span>
+                    </div>
+                </div>
+                <table class="table table-bordered" style="font-size:9pt;">
+                    <tbody>
+                        <tr>
+                            <th class="text-center header bg-light">카드코드</th>
+                            <td class="" id="CardCodeStr"></td>
+                        </tr>
+                        <tr>
+                            <th class="text-center header bg-light">유형</th>
+                            <td class="" id="CardTypeStr"></td>
+                        </tr>
+                        <tr>
+                            <th class="text-center header bg-light">상태</th>
+                            <td class="" id="HardCodeStr"></td>
+                        </tr>
+                        <tr>
+                            <th class="text-center header bg-light">디지털카드여부</th>
+                            <td class="" id="IsDigitalStr"></td>
+                        </tr>
+                        <tr>
+                            <th class="text-center header bg-light">이미지</th>
+                            <td class="" id="CardImageStr" style="height:200px;"></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-outline-primary" type="button" data-bs-dismiss="modal">닫기</button>
+                <button type="button" class="btn btn-primary" data-action="@Url.Action("AddHardcodingDigitalCard","HardcodingList")" id="btnSave">등록</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div class="modal fade" id="viewModal" tabindex="-1" data-bs-backdrop="static" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header bg-light">
+                <h5 class="modal-title" id="staticBackdropLabel">카드상세</h5>
+                <button class="btn p-1" type="button" data-bs-dismiss="modal" aria-label="Close"><span class="fas fa-times fs--1"></span></button>
+            </div>
+            <div class="modal-body">
+                <table class="table table-bordered" style="font-size:9pt;">
+                    <tbody>
+                        <tr>
+                            <th class="text-center header bg-light">카드코드</th>
+                            <td class="" id="ViewCardCodeStr"></td>
+                        </tr>
+                        <tr>
+                            <th class="text-center header bg-light">유형</th>
+                            <td class="" id="ViewCardTypeStr"></td>
+                        </tr>
+                        <tr>
+                            <th class="text-center header bg-light">디지털카드여부</th>
+                            <td class="" id="ViewIsDigitalStr"></td>
+                        </tr>
+                        <tr>
+                            <th class="text-center header bg-light">이미지</th>
+                            <td class="" id="ViewCardImageStr" style="height:200px;"></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-outline-primary" type="button" data-bs-dismiss="modal">닫기</button>
+            </div>
+        </div>
+    </div>
+</div>
+

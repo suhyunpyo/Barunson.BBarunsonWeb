@@ -1,0 +1,68 @@
+﻿@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+@section Styles{
+
+    <style>
+        .table {
+            vertical-align: middle;
+            font-size:9pt;
+        }
+
+        th.header {
+            width: 200px;
+        }
+    </style>
+}
+
+@section Scripts{
+    <script>
+
+        function tableSize() {
+            $('table').css('width', $('#table-list').css('width'));
+        }
+
+        $('#btnSearch').on('click', function(e){
+            var orderId = $('#orderId').val();
+            var option = {
+                url : $(this).data('href'),
+                method : 'get',
+                data : {'tid' : orderId},
+                success : function(res) {
+                    $('#table-list').html(res);
+                    setTimeout(tableSize, 3000);
+                }
+            };
+
+            $.ajax(option);
+        });
+ 
+    </script>
+}
+
+<nav class="mb-2" aria-label="breadcrumb">
+    <ol class="breadcrumb mb-0">
+        <li class="breadcrumb-item"><a href="#!">빠른손관리</a></li>
+        <li class="breadcrumb-item"><a href="#!">기타관리</a></li>
+        <li class="breadcrumb-item active">Toss 결제조회</li>
+    </ol>
+</nav>
+<h2 class="text-bold text-1100 mb-5">Toss 결제조회(청첩장전용)</h2>
+<div class="row align-items-center justify-content-between g-3 mb-4">
+    <div class="col col-auto form-check-inline">
+        <div class="search-box form-check-inline">
+            <input class="form-control search-input fuzzy-search search" type="search" id="orderId" placeholder="Search PG Order ID" aria-label="Search">
+            <span class="fas fa-search search-box-icon"></span>
+        </div>
+        <div class="form-check-inline">
+            <button class="btn btn-sm  btn-outline-primary" id="btnSearch" data-href="@Url.Action("TossPaymentDetail","Util")"><span class="fas fa-search"></span> 조회</button>
+        </div>
+    </div>
+</div>
+
+<div class="mx-n4 mx-lg-n6 px-4 px-lg-6 mb-9 bg-white border-y border-300 mt-2 position-relative top-1">
+    <div class="table-responsive" id="table-list"></div>
+</div>
+

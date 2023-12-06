@@ -1,0 +1,164 @@
+﻿@using Barunson.BBarunsonWeb.Models
+
+@model HardcodingAuthViewModel
+
+@{
+    ViewBag.Title = Model.AuthType.Name;
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@{
+
+}
+
+@section Styles{
+    <style>
+        .sortable-item {
+            font-size: 9pt;
+            color:#777;
+        }
+
+        .search-box {
+            width:15rem;
+        }
+    </style>
+}
+
+@section Scripts{
+    <script src="~/vendors/sortablejs/sortable.min.js"></script>
+    <script>
+        $(document).ready(function (e) {
+
+            $('#keyword').on('keyup', function (e) {
+                var keyword = $(this).val();
+
+                $('#admin-list .sortable-item-wrapper').each(function (e) {
+                    if ($(this).data('admin-name').indexOf(keyword) >= 0 || $(this).data('admin-id').indexOf(keyword) >= 0) {
+                        $(this).show();
+                    }
+                    else {
+                        $(this).hide();
+                    }
+                });
+            });
+
+            $('#btnSave').on('click', function (e) {
+                if (!confirm('변경사항을 저장하시겠습니까?')) return;
+
+                var list = $('#auth-list .sortable-item-wrapper');
+                var arrSendata = [];
+
+                for (var i = 0; i < list.length; i++) {
+                    arrSendata.push('adminId=' + $(list[i]).data('admin-id'));
+                }
+                var sendData = 'type=@(Model.AuthType.Type)&' + arrSendata.join("&");
+
+                var option = {
+                    url: $(this).data('action'),
+                    method: 'post',
+                    data: sendData,
+                    success: function (res) {
+                        alert('적용되었습니다.');
+                        location.reload();
+                    },
+                    error: function (res) {
+                        alert('적용중 오류가 발생하였습니다.');
+                    }
+                };
+
+                $.ajax(option);
+            });
+        });
+    </script>
+}
+<nav class="mb-2" aria-label="breadcrumb">
+    <ol class="breadcrumb mb-0">
+        <li class="breadcrumb-item"><a href="#!">빠른손관리</a></li>
+        <li class="breadcrumb-item"><a href="#!">기타관리</a></li>
+        <li class="breadcrumb-item active">@(Model.AuthType.Name)</li>
+    </ol>
+</nav>
+<h2 class="text-bold text-1100 mb-5">@(Model.AuthType.Name)</h2>
+<div class="mt-4">
+    <div class="row g-4">
+        <div class="col-12 col-xl-12 order-1 order-xl-0">
+            <div class="row mb-9">
+                
+                <div class="col-lg-6">
+                    <div class="card shadow-none border border-300 my-4" data-component-card="data-component-card">
+                        <div class="card-header p-3 border-bottom border-300 bg-soft">
+                            <div class="row g-3 justify-content-between align-items-center">
+                                <div class="col-12 col-md">
+                                    <h4 class="text-900 mb-0" data-anchor="data-anchor">@(Model.AuthType.Name)</h4>
+                                </div>
+                                <div class="col col-md-auto">
+                                    <nav class="nav nav-underline justify-content-end doc-tab-nav align-items-center" role="tablist">
+                                        <button class="btn btn-sm btn-outline-primary ms-2" type="button" id="btnSave" data-action="@Url.Action("SaveAuth","HardcodingList")"><span class="me-2" data-feather="save"></span>Save</button>
+                                    </nav>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card-body p-0">
+                            <div class="p-4 code-to-copy">
+                                <div class="row">
+                                    <div data-sortable='{"group":"auth","animation":150}' id="auth-list">
+                                        @{
+                                            if (Model != null && Model.HardcodingAdminLsts != null)
+                                            {
+                                                foreach (var a in Model.HardcodingAdminLsts)
+                                                {
+                                                    <div class="sortable-item-wrapper mb-3" data-admin-name="@(a.ADMIN_NAME)" data-admin-id="@(a.ADMIN_ID)">
+                                                        <p class="mb-0 sortable-item p-2 rounded-1 bg-light"><span class="text-primary" style="font-weight:bold;">@(a.ADMIN_NAME)</span> (@(a.ADMIN_ID))</p>
+                                                    </div>
+                                                }
+                                            }
+                                        }
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-lg-6">
+                    <div class="card shadow-none border border-300 my-4" data-component-card="data-component-card">
+                        <div class="card-header p-3 border-bottom border-300 bg-soft">
+                            <div class="row g-3 justify-content-between align-items-end">
+                                <div class="col-12 col-md">
+                                    <h4 class="text-900 mb-0" data-anchor="data-anchor">관리자 목록</h4>
+                                </div>
+                                <div class="col col-md-auto">
+                                    <div class="search-box form-check-inline">
+                                        <input class="form-control form-control-sm search-input fuzzy-search search" placeholder="Admin ID or Name" id="keyword" type="search" aria-label="Search" />
+                                        <span class="fas fa-search search-box-icon"></span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card-body p-0">
+                            <div class="p-4 code-to-copy">
+                                <div class="row">
+                                    <div data-sortable='{"group":"auth","animation":150}' id="admin-list">
+
+                                        @{
+                                            if (Model != null && Model.AdminLsts != null)
+                                            {
+                                                foreach (var a in Model.AdminLsts)
+                                                {
+                                                    <div class="sortable-item-wrapper mb-3" data-admin-name="@(a.ADMIN_NAME)" data-admin-id="@(a.ADMIN_ID)">
+                                                        <p class="mb-0 sortable-item bg-light p-2 rounded-1"><span class="text-dark" style="font-weight:bold;">@(a.ADMIN_NAME)</span> (@(a.ADMIN_ID))</p>
+                                                    </div>
+                                                }
+                                            }
+                                        }
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+

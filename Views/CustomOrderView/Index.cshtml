@@ -1,0 +1,677 @@
+﻿@model CustomOrderDetailViewModel
+
+@section Styles {
+    <style>
+        .btn-group-xs > .btn, .btn-xs {
+            padding: 1px 5px;
+            font-size: 12px;
+            line-height: 1.5;
+            border-radius: 3px;
+            height: 23px;
+        }
+
+        .input-xs {
+            height: 23px;
+            padding: 1px 5px;
+            font-size: 12px;
+            line-height: 1.5; /* If Placeholder of the input is moved up, rem/modify this. */
+            border-radius: 3px;
+            border: 1px solid #ced4da;
+        }
+
+        .colname { display: none; }
+        .colpk { display: none; }
+        .colpktitle { color: red; }
+        .colcode { display: none; font-weight:bold; color: white; background-color: black; padding-left:2px; padding-right:2px; margin-left:2px; margin-right:2px; border-radius:5px; }
+
+        .txt-hlight { background-color: aqua; color:black; font-weight:bold; }
+
+        /*
+        .table > tbody > tr > td, .table > tbody > tr > th, .table > thead > tr > th { padding: 3px;}
+        .table th { background-color: #eee; font-weight: normal; color: black; }
+        .table caption span { font-weight: normal; font-size:12px; color: black; }
+        .table caption { padding-bottom: 0; padding-top: 0; }
+        */
+        .table { font-size:11px; }
+        .table caption { padding-bottom: 0; padding-top: 0.5rem; }
+
+        .table > thead > tr > th {
+            padding : 0.4rem 0.4rem;
+        }
+
+        .color_C { background-color: darkcyan; color:white; }
+        .color_E { background-color: #FFD700; }        
+        .color_P { background-color: #32CD32; }
+        .color_I { background-color: #1E90FF; color:white; }
+        .color_B { background-color: #FFB6C1; }
+        
+        .color_ { color:red; text-decoration: underline; }
+
+        .findtext { cursor:pointer;}
+
+        label { font-weight:normal; }
+
+        div.content {
+            padding-left: 0rem;
+            padding-right: 0rem;
+            margin-left: 10rem;
+        }
+    </style>
+}
+
+<div class="container-fluid">    
+    <div class="row">
+        <div class="col col-sm-2">
+            <form class="row row-cols-auto gx-1 py-1" action="@Url.Action("Index", "CustomOrderView")" method="get">                
+                <div class="col">
+                    <input type="text" name="id" value="@ViewBag.id" class="input-xs" style="width:90px;" />
+                </div>
+                <div class="col">
+                    <button type="submit" class="btn btn-xs btn-outline-secondary">조회</button>                    
+                </div>                
+            </form>
+        </div>
+        <div class="col col-sm-10" style="padding-top:10px; font-size:12px;">
+            <div class="row row-cols-auto">
+                <div class="col">
+                    <input type="checkbox" id="view_column" /> <label for="view_column">DB 컬럼명으로 보기</label>
+                </div>
+                <div class="col">
+                    <input type="checkbox" id="view_codev" /> <label for="view_codev">코드값도 같이 보기</label>
+                </div>
+                <div class="col">
+                    <input type="checkbox" id="view_pk" /> <label for="view_pk">PK 보기</label>
+                </div>
+            </div>            
+        </div>
+    </div>
+
+
+    <div class="row gx-2">
+        <div class="col col-sm-2 table-responsive">
+            <table class="table table-sm table-bordered caption-top">
+                <caption><span class="normaltext">주문서</span><span class="colname">custom_order</span></caption>
+                <tbody>
+                    <tr>
+                        <th class="bg-light"><span class="normaltext">주문번호<span class="colpk colpktitle"> [PK]</span></span><span class="colname">order_seq<span class="colpk colpktitle"> [PK]</span></span></th>
+                        <td>@Model.OrderSeqPrefix</td>
+                    </tr>
+                    <tr>
+                        <th class="bg-light"><span class="normaltext">원주문번호</span><span class="colname">up_order_seq</span></th>
+                        <td>@Html.Raw(Model.UpOrderSeq.HasValue ? string.Format("<a href=\"{0}?id={1}\" target=\"_blank\">{1}</a>", Url.Action("Index", "CustomOrderView"), Model.UpOrderSeq.Value) : "")</td>
+                    </tr>
+                    <tr>
+                        <th class="bg-light"><span class="normaltext">주문타입</span><span class="colname">order_type</span></th>
+                        <td>@Model.OrderTypeName<span class="colcode">@Model.OrderType</span></td>
+                    </tr>
+                    <tr>
+                        <th class="bg-light"><span class="normaltext">사이트</span><span class="colname">sales_Gubun</span></th>
+                        <td>@Model.SalesGubunName<span class="colcode">@Model.SalesGubun</span></td>
+                    </tr>
+                    <tr>
+                        <th class="bg-light"><span class="normaltext">제휴사</span><span class="colname">company_seq</span></th>
+                        <td>@Model.CompanyName<span class="colcode">@Model.CompanySeq</span></td>
+                    </tr>
+                    <tr>
+                        <th class="bg-light"><span class="normaltext">주문일</span><span class="colname">order_date</span></th>
+                        <td>@(Model.OrderDate.HasValue ? Model.OrderDate.Value.ToString("yyyy-MM-dd HH:mm:ss") : "")</td>
+                    </tr>
+                    <tr>
+                        <th class="bg-light"><span class="normaltext">아이디</span><span class="colname">member_id</span></th>
+                        <td>@Model.MemberId</td>
+                    </tr>
+                    <tr>
+                        <th class="bg-light"><span class="normaltext">이름</span><span class="colname">order_name</span></th>
+                        <td>@Model.OrderName</td>
+                    </tr>
+                    <tr>
+                        <th class="bg-light"><span class="normaltext">카드</span><span class="colname">card_seq</span></th>
+                        <td><span class="colcode">@Model.CardSeq</span>@Model.CardCode <span class="text-danger info-card" data-bs-toggle="tooltip" data-bs-placement="top" title="@Model.CardName">ⓘ</span></td>
+                    </tr>
+                    <tr>
+                        <th class="bg-light"><span class="normaltext">주문수량</span><span class="colname">order_count</span></th>
+                        <td>@Model.OrderCount</td>
+                    </tr>
+                    <tr>
+                        <th class="bg-light"><span class="normaltext">상태</span><span class="colname">status_seq</span></th>
+                        <td>@Model.StatusSeqName<span class="colcode">@Model.StatusSeq</span></td>
+                    </tr>
+                    <tr>
+                        <th class="bg-light"><span class="normaltext">결제</span><span class="colname">settle_status</span></th>
+                        <td>@Model.SettleStatusName<span class="colcode">@Model.SettleStatus</span> <a href="#" onclick="popupObj(this, 'payment')" data-pop="@Url.Action("TossPaymentDetail", "Util")" data-param="tid=@(Model.PgTid)&type=Basic">결제조회</a></td>
+                    </tr>
+                    <tr>
+                        <th class="bg-light"><span class="normaltext">주문경로</span><span class="colname">inflow_route</span></th>
+                        <td>@Model.inflow_route</td>
+                    </tr>
+                    <tr>
+                        <th class="bg-light"><span class="normaltext">결제경로</span><span class="colname">inflow_route_settle</span></th>
+                        <td>@Model.inflow_route_settle</td>
+                    </tr>
+                    <tr>
+                        <td colspan="2"></td>
+                    </tr>
+                    <tr>
+                        <th class="bg-light"><span class="normaltext">카드할인가</span><span class="colname">order_price</span></th>
+                        <td class="text-end pe-1">@(Model.OrderPrice.HasValue ? Model.OrderPrice.Value.ToString("N0") : "")</td>
+                    </tr>
+                    <tr>
+                        <th class="bg-light"><span class="normaltext">할인가합계(봉투포함)</span><span class="colname">order_total_price</span></th>
+                        <td class="text-end pe-1">@(Model.OrderTotalPrice.HasValue ? Model.OrderTotalPrice.Value.ToString("N0") : "")</td>
+                    </tr>
+                    <tr>
+                        <td colspan="2"></td>
+                    </tr>
+                    @if (Model.EtcPrice.HasValue && Model.EtcPrice.Value != 0)
+                    {
+                        <tr>
+                            <th class="bg-light"><span class="normaltext">기타비용</span><span class="colname">etc_price</span></th>
+                            <td class="text-end pe-1">@Model.EtcPriceMent &nbsp; @Model.EtcPrice.Value.ToString("N0")</td>
+                        </tr>                            
+                    }
+                    @if (Model.DeliveryPrice.HasValue && Model.DeliveryPrice.Value != 0)
+                    {
+                        <tr class="bg-light">
+                            <th><span class="normaltext">배송비</span><span class="colname">delivery_price</span></th>
+                            <td class="text-end pe-1">@Model.DeliveryPrice.Value.ToString("N0")</td>
+                        </tr>
+                    }
+                    @if (Model.JebonPrice.HasValue && Model.JebonPrice.Value != 0)
+                    {
+                        <tr>
+                            <th class="bg-light"><span class="normaltext">제본비</span><span class="colname">jebon_price</span></th>
+                            <td class="text-end pe-1">@Model.JebonPrice.Value.ToString("N0")</td>
+                        </tr>
+                    }
+                    @if (Model.StickerPrice.HasValue && Model.StickerPrice.Value != 0)
+                    {
+                        <tr>
+                            <th class="bg-light"><span class="normaltext">유료스티커</span><span class="colname">sticker_price</span></th>
+                            <td class="text-end pe-1">@Model.StickerPrice.Value.ToString("N0")</td>
+                        </tr>
+                    }
+                    @if (Model.EnvPrice.HasValue && Model.EnvPrice.Value != 0)
+                    {
+                        <tr style="color:#bbb">
+                            <th><span class="normaltext">봉투금액</span><span class="colname">env_price</span></th>
+                            <td class="text-end pe-1">할인가합계에 포함됨 @Model.EnvPrice.Value.ToString("N0")</td>
+                        </tr>
+                    }
+                    @if (Model.GuestbookPrice.HasValue && Model.GuestbookPrice.Value != 0)
+                    {
+                        <tr>
+                            <th class="bg-light"><span class="normaltext">방명록</span><span class="colname">guestbook_price</span></th>
+                            <td class="text-end pe-1">@Model.GuestbookPrice.Value.ToString("N0")</td>
+                        </tr>
+                    }
+                    @if (Model.OptionPrice.HasValue && Model.OptionPrice.Value != 0)
+                    {
+                        <tr>
+                            <th class="bg-light"><span class="normaltext">인쇄판추가비용</span><span class="colname">option_price</span></th>
+                            <td class="text-end pe-1">@Model.OptionPrice.Value.ToString("N0")</td>
+                        </tr>
+                    }
+                    @if (Model.ReducePrice.HasValue && Model.ReducePrice.Value != 0)
+                    {
+                        <tr>
+                            <th class="bg-light"><span class="normaltext">쿠폰할인금액</span><span class="colname">reduce_price</span></th>
+                            <td class="text-end pe-1">@Model.ReducePrice.Value.ToString("N0")</td>
+                        </tr>
+                    }
+                    @if (Model.FticketPrice.HasValue && Model.FticketPrice.Value != 0)
+                    {
+                        <tr>
+                            <th class="bg-light"><span class="normaltext">식권비용</span><span class="colname">fticket_price</span></th>
+                            <td class="text-end pe-1">@Model.FticketPrice.Value.ToString("N0")</td>
+                        </tr>
+                    }
+                    @if (Model.PrintPrice.HasValue && Model.PrintPrice.Value != 0)
+                    {
+                        <tr>
+                            <th class="bg-light"><span class="normaltext">인쇄비</span><span class="colname">print_price</span></th>
+                            <td class="text-end pe-1">@Model.PrintPrice.Value.ToString("N0")</td>
+                        </tr>
+                    }
+                    @if (Model.SasikPrice.HasValue && Model.SasikPrice.Value != 0)
+                    {
+                        <tr>
+                            <th class="bg-light"><span class="normaltext">사식비</span><span class="colname">sasik_price</span></th>
+                            <td class="text-end pe-1">@Model.SasikPrice.Value.ToString("N0")</td>
+                        </tr>
+                    }
+                    @if (Model.EnvInsertPrice.HasValue && Model.EnvInsertPrice.Value != 0)
+                    {
+                        <tr>
+                            <th class="bg-light"><span class="normaltext">봉투삽입</span><span class="colname">envInsert_price</span></th>
+                            <td class="text-end pe-1">@Model.EnvInsertPrice.Value.ToString("N0")</td>
+                        </tr>
+                    }
+                    @if (Model.PointPrice.HasValue && Model.PointPrice.Value != 0)
+                    {
+                        <tr>
+                            <th class="bg-light"><span class="normaltext">적립금</span><span class="colname">point_price</span></th>
+                            <td class="text-end pe-1">@Model.PointPrice.Value.ToString("N0")</td>
+                        </tr>
+                    }
+                    @if (Model.AdditionReducePrice.HasValue && Model.AdditionReducePrice.Value != 0)
+                    {
+                        <tr>
+                            <th><span class="normaltext">중복쿠폰할인액</span><span class="colname">addition_reduce_price</span></th>
+                            <td class="text-end pe-1">@Model.AdditionReducePrice.Value.ToString("N0")</td>
+                        </tr>
+                    }
+                    @if (Model.EnvSpecialPrice.HasValue && Model.EnvSpecialPrice.Value != 0)
+                    {
+                        <tr>
+                            <th class="bg-light"><span class="normaltext">스페셜봉투</span><span class="colname">EnvSpecial_Price</span></th>
+                            <td class="text-end pe-1">@Model.EnvSpecialPrice.Value.ToString("N0")</td>
+                        </tr>
+                    }
+                    @if (Model.FlowerPrice.HasValue && Model.FlowerPrice.Value != 0)
+                    {
+                        <tr>
+                            <th class="bg-light"><span class="normaltext">플라워</span><span class="colname">flower_price</span></th>
+                            <td class="text-end pe-1">@Model.FlowerPrice.Value.ToString("N0")</td>
+                        </tr>
+                    }
+                    @if (Model.SealingStickerPrice.HasValue && Model.SealingStickerPrice.Value != 0)
+                    {
+                        <tr>
+                            <th class="bg-light"><span class="normaltext">실링스티커</span><span class="colname">sealing_sticker_price</span></th>
+                            <td class="text-end pe-1">@Model.SealingStickerPrice.Value.ToString("N0")</td>
+                        </tr>
+                    }
+                    @if (Model.RibbonPrice.HasValue && Model.RibbonPrice.Value != 0)
+                    {
+                        <tr>
+                            <th class="bg-light"><span class="normaltext">쉬폰리본</span><span class="colname">ribbon_price</span></th>
+                            <td class="text-end pe-1">@Model.RibbonPrice.Value.ToString("N0")</td>
+                        </tr>
+                    }
+                    @if (Model.PaperCoverPrice.HasValue && Model.PaperCoverPrice.Value != 0)
+                    {
+                        <tr>
+                            <th class="bg-light"><span class="normaltext">페이퍼커버</span><span class="colname">paperCover_price</span></th>
+                            <td class="text-end pe-1">@Model.PaperCoverPrice.Value.ToString("N0")</td>
+                        </tr>
+                    }
+                    @if (Model.Jebon2Price.HasValue && Model.Jebon2Price.Value != 0)
+                    {
+                        <tr>
+                            <th class="bg-light"><span class="normaltext">제본/HAND</span><span class="colname">jebon2_price</span></th>
+                            <td class="text-end pe-1">@Model.Jebon2Price.Value.ToString("N0")</td>
+                        </tr>
+                    }
+                    @if (Model.PocketPrice.HasValue && Model.PocketPrice.Value != 0)
+                    {
+                        <tr>
+                            <th class="bg-light"><span class="normaltext">포켓카드</span><span class="colname">Pocket_price</span></th>
+                            <td class="text-end pe-1">@Model.PocketPrice.Value.ToString("N0")</td>
+                        </tr>
+                    }
+                    @if (Model.EnvPremiumPrice.HasValue && Model.EnvPremiumPrice.Value != 0)
+                    {
+                        <tr>
+                            <th class="bg-light"><span class="normaltext">프리미엄봉투</span><span class="colname">EnvPremium_price</span></th>
+                            <td class="text-end pe-1">@Model.EnvPremiumPrice.Value.ToString("N0")</td>
+                        </tr>
+                    }
+                    @if (Model.MaskingTapePrice.HasValue && Model.MaskingTapePrice.Value != 0)
+                    {
+                        <tr>
+                            <th class="bg-light"><span class="normaltext">마스킹테이프</span><span class="colname">MaskingTape_price</span></th>
+                            <td class="text-end pe-1">@Model.MaskingTapePrice.Value.ToString("N0")</td>
+                        </tr>
+                    }
+                    <tr>
+                        <td colspan="2"></td>
+                    </tr>
+                    <tr>
+                        <th class="bg-light"><span class="normaltext">최종ERP전송금액</span><span class="colname">last_total_price</span></th>
+                        <td class="text-end pe-1">@(Model.LastTotalPrice.HasValue ? Model.LastTotalPrice.Value.ToString("N0") : "")</td>
+                    </tr>
+                    <tr>
+                        <th class="bg-light"><span class="normaltext">결제금액</span><span class="colname">settle_price</span></th>
+                        <td class="text-end pe-1">@(Model.SettlePrice.HasValue ? Model.SettlePrice.Value.ToString("N0") : "")</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="col-sm-10">
+            <div class="row gx-2">
+                <div class="col col-md-6 table-responsive">
+                    <table class="table table-sm table-bordered caption-top">
+                        <caption><span class="normaltext">주문 상품</span><span class="colname">custom_order_item</span></caption>
+                        <thead>                                
+                            <tr class="bg-light">
+                                <th>id<span class="colpk colpktitle"> [PK]</span></th>
+                                <th><span class="normaltext">타입</span><span class="colname">item_type</span></th>
+                                <th><span class="normaltext">카드</span><span class="colname">card_seq</span></th>
+                                <th><span class="normaltext">수량</span><span class="colname">item_count</span></th>
+                                <th><span class="normaltext">소비자가</span><span class="colname">item_price</span></th>
+                                <th><span class="normaltext">판매가</span><span class="colname">item_sale_price</span></th>
+                                <th><span class="normaltext">할인율</span><span class="colname">discount_rate</span></th>
+                                <th><span class="normaltext">기타정보</span><span class="colname">memo1</span></th>
+                            </tr>                                
+                        </thead>
+                        <tbody>
+                            @if (Model.CustomOrderItem != null)
+                            {
+                                foreach (var item in Model.CustomOrderItem)
+                                {
+                                    <tr class="color_@item.ItemType">
+                                        <td><span class="findtext">@item.Id</span></td>
+                                        <td><span class="colcode">@item.ItemType</span>@item.ItemTypeName</td>
+                                        <td><span class="colcode">@item.CardSeq</span>@item.CardCode <span class="text-danger info-card" data-bs-toggle="tooltip" data-bs-placement="top" title="@item.CardName">ⓘ</span></td>
+                                        <td>@item.ItemCount</td>
+                                        <td>@item.ItemPrice</td>
+                                        <td>@item.ItemSalePrice</td>
+                                        <td>@item.DiscountRate</td>
+                                        <td>@item.Memo</td>
+                                    </tr>
+                                }
+                            }
+                        </tbody>
+                    </table>
+                </div>
+                <div class="col col-md-6 table-responsive">
+                    <table class="table table-sm table-bordered caption-top">
+                        <caption><span class="normaltext">판 정보</span><span class="colname">custom_order_plist</span></caption>
+                        <thead>
+                            <tr class="bg-light">
+                                <th>id<span class="colpk colpktitle"> [PK]</span></th>
+                                <th><span class="normaltext">타입</span><span class="colname">print_type</span></th>
+                                <th><span class="normaltext">카드</span><span class="colname">card_seq</span></th>
+                                <th><span class="normaltext">판이름</span><span class="colname">title</span></th>
+                                <th><span class="normaltext">수량</span><span class="colname">print_count</span></th>
+                                <th><span class="normaltext">겉면여부</span><span class="colname">isFPrint</span></th>
+                                <th><span class="normaltext">인쇄안함여부</span><span class="colname">isNotPrint</span></th>
+                                <th><span class="normaltext">디자인봉투</span><span class="colname">EnvSpecialType</span></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @if (Model.CustomOrderPlist != null)
+                            {
+                                foreach (var item in Model.CustomOrderPlist)
+                                {
+                                    <tr class="color_@item.ItemType">
+                                        <td><span class="findtext">@item.Id</span></td>
+                                        <td><span class="colcode">@item.PrintType</span>@item.PrintTypeName</td>
+                                        <td><span class="colcode">@item.CardSeq</span>@item.CardCode <span class="text-danger info-card" data-bs-toggle="tooltip" data-bs-placement="top" title="@item.CardName">ⓘ</span></td>
+                                        <td class="preview-image">
+                                            @item.Title
+                                            @if(item.ImgName != null && item.ImgName.Length > 0)
+                                            {
+                                                <span class="text-info far fa-file-image" data-name="@item.ImgName" data-folder="@item.ImgFolder">image</span>
+                                            }
+                                        </td>
+                                        <td>@item.PrintCount</td>
+                                        <td>@item.IsFPrint</td>
+                                        <td>@item.IsNotPrint</td>
+                                        <td>@item.EnvSpecialType</td>
+                                    </tr>
+                                }
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="row gx-2">
+                <div class="col col-md-6 table-responsive">
+                    @if (Model.DeliveryInfo != null)
+                    {
+                        foreach (var item in Model.DeliveryInfo)
+                        {
+                            <table class="table table-sm table-bordered caption-top" style="margin-bottom:0px;">
+                                <caption><span class="normaltext">배송지 @item.DeliverySeq</span><span class="colname">delivery_info</span></caption>
+                                <thead>
+                                    <tr class="bg-light">
+                                        <th>ID</th>
+                                        <th class="colpk"><span class="normaltext">주문번호<span class="colpktitle"> [PK]</span></span><span class="colname">ORDER_SEQ<span class="colpktitle"> [PK]</span></span></th>
+                                        <th><span class="normaltext">순번<span class="colpk colpktitle"> [PK]</span></span><span class="colname">DELIVERY_SEQ<span class="colpk"><span class="colpktitle"> [PK]</span></span></span></th>
+                                        <th><span class="normaltext">이름</span><span class="colname">NAME</span></th>
+                                        <th><span class="normaltext">주소</span><span class="colname">ADDR</span></th>
+                                        <th><span class="normaltext">배송방법</span><span class="colname">delivery_method</span></th>
+                                    </tr>
+                                </thead>
+                                <tbody>                                        
+                                    <tr>
+                                        <td>@item.Id</td>
+                                        <td class="colpk">@item.OrderSeq</td>
+                                        <td>@item.DeliverySeq</td>
+                                        <td>@item.Name</td>
+                                        <td>@item.Addr</td>
+                                        <td>@item.DeliveryMethodName<span class="colcode">@item.DeliveryMethod</span></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                            <div style="padding: 10px; border-left: 1px solid #dddddd; border-right: 1px solid #dddddd; border-bottom: 1px solid #dddddd; margin-bottom: 20px; ">
+                                <table class="table table-sm table-bordered caption-top" style="margin-bottom:0px;">
+                                    <caption><span class="normaltext">배송 상품</span><span class="colname">delivery_info_detail<span class="colpk"> (WHERE delivery_id = @item.Id)</span></span></caption>
+                                    <thead>
+                                        <tr class="bg-light">
+                                            <th class="colpk">ID<span class="colpktitle"> [PK]</span></th>
+                                            <th><span class="normaltext">상품명</span><span class="colname">item_title</span></th>
+                                            <th><span class="normaltext">수량</span><span class="colname">item_count</span></th>
+                                            <th><span class="normaltext">타입</span><span class="colname">item_type</span></th>
+                                            <th>item_id</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @if (item.DeliveryInfoDetail != null)
+                                        {
+                                            foreach (var subItem in item.DeliveryInfoDetail)
+                                            {
+                                                <tr class="color_@subItem.ItemTypeColor">
+                                                    <td class="colpk">@subItem.Id</td>
+                                                    <td>@subItem.ItemTitle</td>
+                                                    <td>@subItem.ItemCount</td>
+                                                    <td>@subItem.ItemType</td>
+                                                    <td><span class="findtext">@subItem.ItemId</span></td>
+                                                </tr>
+                                            }
+                                        }
+                                    </tbody>
+                                </table>
+                            </div>
+                        }
+                    }                        
+                </div>
+
+                <div class="col col-md-6 table-responsive">
+                    @if (Model.CustomOrderCopy != null)
+                    {
+                        foreach (var item in Model.CustomOrderCopy)
+                        {
+                            <table class="table table-sm table-bordered caption-top" style="margin-bottom:0px;">
+                                <caption><span class="normaltext">지시서 @item.DeliverySeq</span><span class="colname">custom_order_copy</span></caption>
+                                <thead>
+                                    <tr class="bg-light">
+                                        <th class="colpk"><span class="normaltext">주문번호<span class="colpktitle"> [PK]</span></span><span class="colname">order_seq<span class="colpktitle"> [PK]</span></span></th>
+                                        <th><span class="normaltext">순번<span class="colpk colpktitle"> [PK]</span></span><span class="colname">delivery_seq<span class="colpk colpktitle"> [PK]</span></span></th>
+                                        <th><span class="normaltext">배송방법</span><span class="colname">delivery_method</span></th>
+                                        <th><span class="normaltext">제본처리</span><span class="colname">jebon_str</span></th>
+                                        <th><span class="normaltext">특수인쇄</span><span class="colname">print_str</span></th>
+                                        <th><span class="normaltext">주의요망</span><span class="colname">isRisk</span></th>
+                                        <th><span class="normaltext">퀵처리</span><span class="colname">isQuick</span></th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td class="colpk">@item.OrderSeq</td>
+                                        <td>@item.DeliverySeq</td>
+                                        <td>@item.DeliveryMethod</td>
+                                        <td>@item.JebonStr</td>
+                                        <td>@item.PrintStr</td>
+                                        <td>@item.IsRisk</td>
+                                        <td>@item.IsQuick</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                            <div style="padding: 10px; border-left: 1px solid #dddddd; border-right: 1px solid #dddddd; border-bottom: 1px solid #dddddd; margin-bottom: 20px; ">
+                                <table class="table table-sm table-bordered caption-top" style="margin-bottom:0px;">
+                                    <caption><span class="normaltext">지시서 항목</span><span class="colname">custom_order_copy_detail<span class="colpk"> (WHERE order_seq = @item.OrderSeq AND delivery_seq = @item.DeliverySeq)</span></span></caption>
+                                    <thead>
+                                        <tr>
+                                            <th class="colpk">id<span class="colpktitle"> [PK]</span></th>
+                                            <th><span class="normaltext">항목</span><span class="colname">item_type</span></th>
+                                            <th><span class="normaltext">인쇄여부</span><span class="colname">isPItem</span></th>
+                                            <th><span class="normaltext">항목명</span><span class="colname">item_title</span></th>
+                                            <th><span class="normaltext">코드</span><span class="colname">item_code</span></th>
+                                            <th><span class="normaltext">수량</span><span class="colname">item_count</span></th>
+                                            <th><span class="normaltext">기타</span><span class="colname">etc1</span></th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @if (item.CustomOrderCopyDetail != null)
+                                        {
+                                            foreach (var subItem in item.CustomOrderCopyDetail)
+                                            {
+                                                <tr class="color_@subItem.ItemType">
+                                                    <td class="colpk">@subItem.Id</td>
+                                                    <td><span class="colcode">@subItem.ItemType</span>@subItem.ItemTypeName</td>
+                                                    <td>@subItem.IsPitem</td>
+                                                    <td>@subItem.ItemTitle</td>
+                                                    <td>@subItem.ItemCode</td>
+                                                    <td>@subItem.ItemCount</td>
+                                                    <td>@subItem.Etc</td>
+                                                </tr>
+                                            }
+                                        }
+                                    </tbody>
+                                </table>
+                            </div>
+                        }
+                    }
+                </div>
+            </div>
+            <div class="row gx-2">
+                <div class="col col-md-12 table-responsive">
+                    <table class="table table-sm table-bordered caption-top">
+                        <caption><span class="normaltext">주문 처리 이력</span><span class="colname">custom_order_history</span></caption>
+                        <thead>
+                            <tr class="bg-light">
+                                <th class="colpk">id<span class="colpk colpktitle"> [PK]</span></th>
+                                <th><span class="normaltext">섹션</span><span class="colname">htype</span></th>
+                                <th><span class="normaltext">담당자</span><span class="colname">admin_id</span></th>
+                                <th><span class="normaltext">처리시각</span><span class="colname">reg_date</span></th>
+                                <th><span class="normaltext">내용</span><span class="colname">memo</span></th>
+                                <th><span class="normaltext">쿼리</span><span class="colname">system_sql</span></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @if(Model.CustomOrderHistory != null)
+                            {
+                                foreach(var item in Model.CustomOrderHistory)
+                                {
+                                    <tr>
+                                        <td class="colpk" nowrap>@item.id</td>
+                                        <td nowrap>@item.htype</td>
+                                        <td nowrap>@item.admin_id</td>
+                                        <td nowrap>@item.reg_date.ToString("MM-dd HH:mm:ss")</td>
+                                        <td nowrap>@item.memo</td>
+                                        <td>@item.system_sql</td>
+                                    </tr>
+                                }
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div id="preview" style="position:absolute; display:none;"><img id="preview-image" src="https://www.barunsoncard.com/resources/images/common/logo_barunson.png" style="max-width:800px; max-height:400px;" /></div>
+</div>
+    
+@section Scripts {
+<script src="~/js/jquery.cookie.js"></script>
+<script>
+    $("#view_column").click(function () {
+        if ($("#view_column").prop('checked')) {
+            $(".colname").show();
+            $(".normaltext").hide();
+            $.cookie("view_column", "Y", { expires: 365 });
+        } else {
+            $(".colname").hide();
+            $(".normaltext").show();
+            $.cookie("view_column", "N", { expires: 365 });
+        }
+    })
+
+    $("#view_codev").click(function () {
+            if ($("#view_codev").prop('checked')) {
+            $(".colcode").show();
+            $.cookie("view_codev", "Y", { expires: 365 });
+        } else {
+            $(".colcode").hide();
+                $.cookie("view_codev", "N", { expires: 365 });
+        }
+    })
+
+    $("#view_pk").click(function () {
+        if ($("#view_pk").prop('checked')) {
+            $(".colpk").show();
+            $.cookie("view_pk", "Y", { expires: 365 });
+        } else {
+            $(".colpk").hide();
+            $.cookie("view_pk", "N", { expires: 365 });
+        }
+    })
+
+    $(function () {
+        if ($.cookie("view_column") == "Y") {
+            $("#view_column").prop("checked", true);
+            $(".colname").show();
+            $(".normaltext").hide();
+        }
+            
+        if ($.cookie("view_codev") == "Y") {
+                $("#view_codev").prop("checked", true);
+            $(".colcode").show();
+        }
+
+        if ($.cookie("view_pk") == "Y") {
+            $("#view_pk").prop("checked", true);
+            $(".colpk").show();
+        }
+    });
+
+    $(".findtext").click(function () {
+        $(".txt-hlight").removeClass("txt-hlight");
+
+        var search = $(this).text();
+        $(":contains('" + search + "')").each(function () {
+            if ($(this).text() == search) {
+                $(this).addClass("txt-hlight");
+            }                
+        });
+    });
+
+    $().ready(function(e){
+        $('.preview-image').on('mouseover', function (e) {
+            var item = $(this).find('.fa-file-image');
+            if(item.length > 0) {
+                var name = item.data('name');
+                var folder = item.data('folder');
+                $('#preview-image').attr('src', 'https://officefile.barunsoncard.com/preview/'+folder+'/'+name);
+                $('#preview').css('top', e.clientY).css('left', e.clientX-800).show();
+            }
+        })
+        .on('mousemove', function (e) {
+            $('#preview').css('top', e.clientY).css('left', e.clientX-800);
+        })
+        .on('mouseout', function (e) {
+            $('#preview').hide();
+        });
+    });
+
+    function popupObj(obj, target) {
+        var arrPath = [];
+        arrPath.push(obj.getAttribute('data-pop'));
+        arrPath.push(obj.getAttribute('data-param'));
+        
+        window.open(arrPath.join('?'), target, "width=800, height:600, scrollbars=auto");
+    }
+
+</script>
+}

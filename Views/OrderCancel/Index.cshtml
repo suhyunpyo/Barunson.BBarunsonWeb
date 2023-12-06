@@ -1,0 +1,715 @@
+﻿@model OrderCancelViewModel
+@{
+    ViewData["Title"] = "결제 취소 & 환불하기";
+}
+
+@section Styles {
+        <link href="../../vendors/glightbox/glightbox.min.css" rel="stylesheet">
+        <link href="../../vendors/flatpickr/flatpickr.min.css" rel="stylesheet">
+        <link href="../../vendors/choices/choices.min.css" rel="stylesheet">
+        <link href="../../assets/css/theme-rtl.min.css" type="text/css" rel="stylesheet" id="style-rtl">
+        <link href="../../assets/css/theme.min.css" type="text/css" rel="stylesheet" id="style-default">
+        <link href="../../assets/css/user-rtl.min.css" type="text/css" rel="stylesheet" id="user-style-rtl">
+        <link href="../../assets/css/user.min.css" type="text/css" rel="stylesheet" id="user-style-default">
+        <link rel="stylesheet" href="https://www.barunsonmcard.com/css/loader.css?ver=5.1">
+        <style type="text/css">
+            .goverlay {
+                background: rgba(0,0,0,0.6);
+            }
+        </style>
+
+}
+
+<div class="loader">
+    <div class="lds-spinner"><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div></div>
+</div>
+
+<form class="Refundfrm" method="post" asp-action="RefundSave" asp-controller="OrderCancel">
+<div class="mt-4" style="margin-top:-5.5rem !important">
+    <div class="row g-4">
+         @foreach (var item in Model.DataModel)
+        {
+            <input type="hidden" asp-for="ViewType" />
+            <input type="hidden" asp-for="StatusSeq" value="@item.StatusSeq" />
+            <input type="hidden" asp-for="OrderType" value="@item.OrderType" />
+            <input type="hidden" asp-for="OrderName" value="@item.OrderName" />
+            <input type="hidden" asp-for="SettleMethod" value="@item.SettleMethod" />
+            <input type="hidden" asp-for="AdminId"  value="@item.AdminId"/>
+            <input type="hidden" asp-for="CompanySeq" value="@item.CompanySeq" />
+            <input type="hidden" asp-for="PgShopId" value="@item.PgShopId" />
+            <input type="hidden" asp-for="PgTid" value="@item.PgTid" />
+            <input type="hidden" asp-for="DacomTid" value="@item.DacomTid " />
+            <input type="hidden" asp-for="SettleStatus" value="@item.SettleStatus" />
+            <input type="hidden" asp-for="isCloseCopy" value="@item.isCloseCopy" />
+            <input type="hidden" asp-for="AdditionCouponSeq" value="@item.AdditionCouponSeq" />
+            <input type="hidden" asp-for="CancelType" value="@item.CancelType" />
+            <input type="hidden" asp-for="MemberId" value= "@item.MemberId"/>
+            <input type="hidden" asp-for="SalesGubun" value="@item.SalesGubun" />
+            <input type="hidden" asp-for="RefundCode" />
+            <input type="hidden" asp-for="SettleDate" value="@item.SettleDate" />
+            <input type="hidden" id="RealSettlePrice" value="@item.SettlePrice" />
+            <input type="hidden" asp-for="CancelUserType" value="@item.CancelUserType" />
+
+            @if (Model.ViewType == "1") @* 빠른손에서 주문취소를 클릭한 경우*@
+            {
+                <div class="col-12 col-xl-5">
+                    <div class="mb-9">
+                        <div class="card shadow-none border border-300 my-4" data-component-card="data-component-card" @*style="width:55%"*@>
+                            <div class="card-header p-4 border-bottom border-300 bg-soft" style="height:30px">
+                                <div class="row g-3 justify-content-between align-items-center">
+                                        <div class="col-12 col-md" style="height:40px">
+                                            <h4 class="text-900 mb-0" style="margin-top:-5px">
+                                                결제 취소하기 (<span>@item.SettleName</span>)
+                                            </h4>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="card-body p-0">
+                                <div class="p-4 code-to-copy">
+                                    <div class="mb-3 row">
+                                        <label class="col-sm-3 col-form-label" for="OrderSeq">주문번호</label>
+                                            <div class="col-sm-8">
+                                                <input class="form-control-plaintext outline-none" asp-for="OrderSeq" type="text" value="@item.OrderSeq" readonly="" />
+                                                <div class="mb-3 row"> </div>
+                                        </div>
+                                        <label class="col-sm-3 col-form-label" for="SettlePrice">결재금액</label>
+                                        <div class="col-sm-8">
+                                            <input class="form-control-plaintext outline-none" i asp-for="SettlePrice" type="text" readonly="" value="@string.Format("{0:#,##0.###}", item.SettlePrice)" />
+                                            <div class="mb-3 row"> </div>
+                                        </div>
+
+                                        <label class="col-sm-3 col-form-label" for="RefundPrice"  style="margin-top:10px;">취소 사유</label>
+                                        @if (@item.OrderType == "W")
+                                        {
+                                            <div class="col-sm-9" style="margin-top:10px;display:">
+
+                                                <select class="form-select canceltype1" asp-for="CanCelType1" asp-items="Model.CanCelType1s" style="width: 100%">
+                                                </select>
+
+                                                <select class="form-select canceltype2" asp-for="CanCelType2" asp-items="Model.CanCelType2s" style="margin-top:20px;" style="width: 30%" disabled>
+                                                </select>
+
+                                                <textarea class="form-control canceltypecomment" asp-for="OrderCancelTypeComment" rows="3"  style="margin-top:20px;display:none"  placeholder="사유를 입력해주세요"></textarea>
+
+                                                <div class="mb-3 row"> </div>
+                                            </div>
+                                        }
+                                        else
+                                        {
+                                            <textarea class="form-control cancelreason" asp-for="CancelReason" rows="3" placeholder="취소 사유를 입력해주세요" style="width:60%"></textarea>
+                                        }
+
+                                        <div class="col-sm-9" style="margin-top:15px;display:none">
+                                            <textarea class="form-control" id="exampleTextarea" rows="3"  placeholder="예금주를 입력해주세요."> </textarea>
+                                            <div class="mb-3 row"> </div>
+                                        </div>
+
+
+                                        @if ((item.SettleStatus == 1 || item.SettleStatus == 2) && item.OrderType == "W")
+                                        {
+                                            <label class="col-sm-3 col-form-label" for="RefundPrice">재결제</label>
+
+                                            <div class="col-sm-9" style="margin-top:10px;">
+
+                                                <input class="form-check-input" asp-for="RePay" type="checkbox" >
+                                                <label class="form-check-label" for="RePay">재결제가능 상태로 업데이트</label>
+
+                                            </div>
+                                        }
+
+                                        @if(!string.IsNullOrEmpty(item.DacomTid) && (item.SettleMethod == "2" || item.SettleMethod == "1" || item.SettleMethod == "5" || item.SettleMethod == "6" || item.SettleMethod == "9"))
+                                        {
+                                            <label class="col-sm-3 col-form-label" for="RefundPrice">결재취소</label>
+
+                                            <div class="col-sm-9" style="margin-top:10px;">
+
+                                                <input class="form-check-input" asp-for="PgCancel"  type="checkbox" checked>
+                                                <label class="form-check-label" for="PgCancel">Toss(PG) 결제취소해 주십시요.</label>
+
+                                            </div>
+                                        }
+                                        else if (item.SettleMethod == "2" || item.SettleMethod == "5" || item.SettleMethod == "6" ||  item.SettleMethod == "9")
+                                        {
+                                            <label class="col-sm-3 col-form-label" for="RefundPrice">결재취소</label>
+
+                                            <div class="col-sm-9" style="margin-top:10px;">
+
+                                                <input class="form-check-input" asp-for="PgCancel" type="checkbox" checked>
+                                                <label class="form-check-label" for="PgCancel">Toss(PG) 결제취소해 주십시요.</label>
+
+                                            </div>
+                                        }
+                                        else
+                                        {
+                                            <input type="hidden" asp-for="PgCancel" />
+                                        }
+
+
+                                    </div>
+
+                                     <div class="col-sm-9">
+                                        <div class="mb-3 row">
+                                            <font color="red">
+                                                ※재결제시 반드시 현재의 상태 확인할것.<br>
+                                                ※재결제 처리시 위아래 모두 체크해야 함.<br>
+                                                ※취소 처리는 항상 신중할 것.<br>
+                                            </font>
+                                        </div>
+                                    </div>
+
+                                <button class="btn btn-primary cancel_btn" type="submit">
+                                    @(item.SettleMethod == "3" ? "취소 처리 및 환불 등록" : "취소 처리")
+                                     </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            }
+            if (((item.SettleMethod == "3" && item.SettleStatus == 2) || Model.ViewType == "2")) @* 무통장이고 빠른손에서 환불등록을 클릭한 경우*@
+            {
+                <div class="col-11 col-xl-4">
+                    <div class="card shadow-none border border-300 my-4" data-component-card="data-component-card"@* style="width:55%"*@>
+                            <div class="card-header p-4 border-bottom border-300 bg-soft" style="height:30px">
+                            <div class="row g-3 justify-content-between align-items-center">
+                                    <div class="col-12 col-md" style="margin-top:10px">
+                                    <h4 class="text-900 mb-0">환불 등록</h4>
+                                </div>
+                            </div>
+                        </div>
+                
+                        <div class="card-body p-0">
+                            <div class="p-4 code-to-copy">
+                                <div class="mb-3 row">
+                                    <label class="col-sm-3 col-form-label" for="OrderSeq">주문번호</label>
+                                        <div class="col-sm-9">
+                                            <input class="form-control-plaintext outline-none" asp-for="OrderSeq" type="text" readonly="" value="@item.OrderSeq" />
+                                            <div class="mb-3 row"> </div>
+                                        </div>
+                                        <label class="col-sm-3 col-form-label" for="JumunType" style="height:57px;">카드유형</label>
+                                        <div class="col-sm-9">
+                                            <select class="form-select" asp-for="JumunType" asp-items="Model.JumunTypes"></select>
+        
+                                        </div>
+                                        <label class="col-sm-3 col-form-label" for="SettlePrice">결재금액</label>
+                                        <div class="col-sm-9">
+                                            <input class="form-control-plaintext outline-none" asp-for="SettlePrice" type="text" readonly="" value="@string.Format("{0:#,##0.###}", item.SettlePrice)" />
+                                            <div class="mb-3 row"> </div>
+                                        </div>
+                                        <label class="col-sm-3 col-form-label" for="RefundPrice" style="height:57px;">환불금액</label>
+
+                                       <div class="col-sm-9">
+                                            <input class="form-control" asp-for="RefundPrice" type="text" value="@item.SettlePrice" />
+
+                                            <div class="mb-3 row"> </div>
+                                        </div>
+                                        <label class="col-sm-3 col-form-label"  for="RefundDate">환불예정일</label>
+
+                                        <div class="col-sm-9">
+                                            <div class="flatpickr-input-container">
+                                                <div class="form-floating" >
+                                                    <input class="form-control datetimepicker" asp-for="RefundDate" type="text" placeholder="시작일" data-options='{"disableMobile":true}' style="height:40px" />
+                                                    <span class="uil uil-calendar-alt flatpickr-icon text-700"></span>
+                                                    <label class="ps-6" for="StartDate">환불예정일</label>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <label class="col-sm-3 col-form-label" for="RefundBank" style="margin-top:15px;">은행명</label>
+
+                                       <div class="col-sm-9" style="margin-top:15px;">
+
+                                            <input class="form-control"  asp-for="RefundBank"  type="text" placeholder="은행명을 입력해주세요." />
+
+                                            <div class="mb-3 row"> </div>
+                                        </div>
+
+                                        <label class="col-sm-3 col-form-label" for="RefundBankAccount">계좌번호</label>
+
+                                       <div class="col-sm-9">
+
+                                            <input class="form-control" asp-for="RefundBankAccount"   type="text" placeholder="계좌번호룰 입력해주세요." />
+
+                                            <div class="mb-3 row"> </div>
+                                        </div>
+
+
+                                        <label class="col-sm-3 col-form-label" for="RefundUserName">예금주</label>
+
+                                        <div class="col-sm-9">
+
+                                                        <input class="form-control" asp-for="RefundUserName" type="text" placeholder="예금주를 입력해주세요." />
+
+                                            <div class="mb-3 row"> </div>
+                                        </div>
+
+                                        <label class="col-sm-3 col-form-label" for="RefundType1">환불유형</label>
+
+                                        <div class="col-sm-9">
+                                            <select class="form-select refundtype1" asp-for="RefundType1" asp-items="Model.RefundType1s"></select>
+        
+                                        </div>
+                                        <label class="col-sm-3 col-form-label" for="RefundType2" style="margin-top:15px">환불<br />세부유형</label>
+
+                                        <div class="col-sm-8">
+
+                                                    <select class="form-select refundtype2" asp-for="RefundType2" asp-items="Model.RefundType2s" style="margin-top:20px">
+                                                </select>
+        
+                                        </div>
+
+
+                                        <label class="col-sm-3 col-form-label" for="RefundMsg" style="margin-top:15px;">환불사유</label>
+
+                                        <div class="col-sm-9" style="margin-top:15px;">
+                                                        <textarea class="form-control" asp-for="RefundMsg" rows="3" placeholder="예금주를 입력해주세요."> </textarea>
+                          
+
+                                            <div class="mb-3 row"> </div>
+                                        </div>
+                
+                                    </div>
+                                                <button class="btn btn-primary refund_btn" type="submit">환불 저장</button>
+                                </div>
+                            </div>
+                        </div>
+                </div>
+            }
+        }
+    </div>
+</div>
+
+</form>
+
+<script src="//code.jquery.com/jquery-latest.min.js"></script>
+<script src="../../vendors/glightbox/glightbox.min.js"> </script>
+<script src="../../vendors/choices/choices.min.js"></script>
+<script src="../../vendors/dropzone/dropzone.min.js"></script>
+
+<script>
+    $(".loader").hide();
+
+    @*if ($("[name=StatusSeq]").val() == "5")
+    {
+        alert("이미 취소 처리된 주문건이며, 환불등록만 가능합니다.");
+    }*@
+
+    var StatusSeq = $("#StatusSeq").val();
+    var orderType = $("[name=OrderType]").val();
+
+    if(orderType == "W")
+    {
+        $("#JumunType option[value=0]").attr("selected", true);
+    }
+    else if (orderType == "S") {
+        $("#JumunType option[value=3]").attr("selected", true);
+    }
+    else if (orderType == "F") {
+        $("#JumunType option[value=2]").attr("selected", true);
+    }
+
+    $(".navbar-vertical, .navbar-top").remove();
+        
+    $(".canceltype1").change(function () {
+        var selValue = $(this).find("option:selected").val();
+ 		var selText = $(this).find("option:selected").text();
+
+            $(".canceltype2 option[value='']").attr("selected", true);
+
+        //  $("[name=order_cancel_type] option[value='']").attr("selected", true);
+            $(".canceltypecomment").hide().val("");
+            $(".canceltype2").show();
+       
+		if(selValue == "") {
+            $(".canceltype2").attr("disabled", true);
+		}
+		else if (selText == "기타"){
+            $(".canceltype2").attr("disabled", true).hide();
+            $(".canceltypecomment").show();
+			//$("[name=order_cancel_type_comment]").show();
+		}
+		else {
+                
+            $(".canceltype2").attr("disabled", false);
+             
+            var i = 0
+            $('.canceltype2 option').each(function () {
+                if (selValue.substr(0, 1) == $(this).val().substr(0, 1))
+                {
+                    $(".canceltype2 option[value='']").attr("selected", false);
+                    if(i == 0)
+                    {
+                        //  $(this).show();
+                        $(this).attr("selected", true).show();
+                    }
+                    else{
+                        $(this).attr("selected", false).show();
+                    }
+                    // $(".canceltype2").find("option[value!='']").remove();
+                    i++;
+                }
+                else   {
+                    $(this).hide();
+                }
+
+            });
+            $(".canceltype2 option[value='" + selValue + "']").attr("selected", true);
+		}
+
+
+    });
+
+    $(".refundtype1").change(function () {
+        var selText = $(this).find("option:selected").text();
+        Refundtype2_Chk(selText);
+    });
+
+    function Refundtype2_Chk(chk)
+    {
+        var i = 0
+        $('.refundtype2 option').each(function (e) {
+            
+            var va = $(this).val().match("_") ? $(this).val().split("_")[0] : $(this).val();
+            var seq = $(this).val().match("_") ? $(this).val().split("_")[1] : $(this).attr("id");
+            var code = $(this).val().match("_") ? $(this).val().split("_")[2] : $(this).attr("class");
+            if (va == chk) {
+                $(this).show();
+                
+                if (i == 0) { $(this).attr("selected", true).show();}
+                i++;
+            }
+            else {
+                $(this).attr("selected", false).hide();
+            }
+
+            $(this).val(va).attr({ "id": seq, "class": code });
+           
+        });
+
+    }
+
+    Refundtype2_Chk("환입");
+
+    if($(".col-xl-5").length > 0) //빠른손에서 주문취소 클릭
+    {
+        if ($(".col-xl-4").length > 0) // 무통장
+        {
+            $(".col-xl-4").css({ "margin-top": "-40px", "width": "100%", "margin-bottom": "-60px" });
+            $(".cancel_btn").remove();
+            $(".refund_btn").addClass("cancel_refund_btn");
+            $(".cancel_refund_btn").text("취소 처리 및 환불 등록")
+
+            window.resizeTo(600, 1000);
+        }
+        else{
+            $("body").css("overflow-y", "hidden");
+            window.resizeTo(650, 630);
+        }
+        
+    }
+    else { //  환불관리 클릭
+        $("body").css("overflow-y", "hidden");
+        window.resizeTo(595, 930);
+    }
+
+    $(".cancel_btn").click(function (e) {
+        e.preventDefault();
+
+        var orderType = $("[name=OrderType]").val();
+        var statusSeq = $("[name=StatusSeq]").val();
+        //alert("orderType:" + orderType + "/" + statusSeq)
+        
+        if (orderType == 'W') {
+            if (statusSeq == 15) {
+                if (!confirm('배송이 완료된 건입니다. 정말 취소하시겠습니까?')) {
+                    return;
+                }
+            }
+        }
+        else {
+            if (statusSeq == 12) {
+                if (!confirm('배송이 완료된 건입니다. 정말 취소하시겠습니까?')) {
+                    return;
+                }
+            }
+        }
+        
+        var chkYN = $("[name=PgCancel]").is(":checked");
+        var confirm_str = "";
+        var checkCnt = $("[type=checkbox]").length;
+        var selValue = $(".canceltype1").find("option:selected").val();
+        var selText = $(".canceltype1").find("option:selected").text();
+
+        if (selValue == "") {
+            alert("취소 사유를 선택해 주세요");
+            $(".canceltype1").focus();
+            return false;
+
+        }
+        
+        if (chkYN == true) {
+            confirm_str = "데이콤 결제취소가 체크 되었습니다.\n데이콤 결제가 취소 됩니다.\n취소를 진행하시겠습니까??";
+        } else {
+            confirm_str = "데이콤 결제취소가 체크 되지 않았습니다.\n데이콤 결제는 취소되지 않습니다.\n취소를 진행하시겠습니까??";
+        }
+        
+       
+        if (checkCnt == "2") {
+            if (confirm(confirm_str) == true) {    //확인
+                    if (selText != "기타"){
+                        var typeValue = $(".canceltype2").find("option:selected").val();
+                        var typeText =  $(".canceltype2").find("option:selected").text();
+
+                        if (typeValue == "") {
+                            alert("취소 사유를 선택해 주세요");
+                            $(".canceltype2").focus();
+                            return false;
+                        }
+                        $(".canceltypecomment").val(typeText);
+                        $("#CancelType").val(typeValue);
+
+                    } else {
+                        if ($.trim($(".canceltypecomment").val()) == "") {
+                            alert("취소 사유를 입력해 주세요");
+                            $(".canceltypecomment").focus();
+                            return false;
+
+                        }
+
+                        $("#CancelType").val(selValue);
+
+                    }
+            }else{return false;}  //취소
+        } else {
+            if (selText != "기타") {
+                var typeValue = $(".canceltype2").find("option:selected").val();
+                var typeText = $(".canceltype2").find("option:selected").text();
+
+                if (typeValue == "") {
+                    alert("취소 사유를 선택해 주세요");
+                    $(".canceltype2").focus();
+                    return false;
+                }
+
+                $(".canceltypecomment").val(typeText);
+                $("#CancelType").val(typeValue);
+
+
+            } else {
+                if ($.trim($(".canceltypecomment").val()) == "") {
+                    alert("취소 사유를 입력해 주세요");
+                    $(".canceltypecomment").focus();
+                    return false;
+
+                }
+
+                $("#CancelType").val(selValue);
+
+            }
+
+        }
+        $("#SettlePrice").val($("#SettlePrice").val().replace(/,/g, ""));
+        var form = $(".Refundfrm");
+        var url = form.attr('action');
+        
+        $(".loader").show();
+
+        $.ajax({
+                cache: false,
+                url: url,
+                type: 'POST',
+                data: form.serialize(),
+                success: function (data) {
+                    $(".loader").hide();
+                    if (data.code == "0000") {
+                    alert("결제취소가 정상 처리되었습니다.\n빠른손에서 다시 주문 조회 해주세요.");
+                        window.close();
+                    } else {
+                        alert(data.message);
+                        window.close();
+                    }
+                }, 
+
+                error: function (xhr, status) {
+                $(".loader").hide();
+                    alert(xhr + " : " + status);
+                }
+        }); 
+
+    });
+
+    var phoenixIsRTL = window.config.config.phoenixIsRTL;
+    if (phoenixIsRTL) {
+        var linkDefault = document.getElementById('style-default');
+        var userLinkDefault = document.getElementById('user-style-default');
+        linkDefault.setAttribute('disabled', true);
+        userLinkDefault.setAttribute('disabled', true);
+        document.querySelector('html').setAttribute('dir', 'rtl');
+    } else {
+        var linkRTL = document.getElementById('style-rtl');
+        var userLinkRTL = document.getElementById('user-style-rtl');
+        linkRTL.setAttribute('disabled', true);
+        userLinkRTL.setAttribute('disabled', true);
+    }
+
+    // 환불저장 / 취소 처리 및 환불 등록
+    $(".refund_btn").click(function (e) {
+        e.preventDefault();
+        
+        //취소 처리 및 환불 등록
+        if ($(this).hasClass("cancel_refund_btn")) {
+            // 취소 처리 유효성 체크 
+            var orderType = $("[name=OrderType]").val();
+            var statusSeq = $("[name=StatusSeq]").val();
+
+            if (orderType == 'W') {
+                if (statusSeq == 15) {
+                    if (!confirm('배송이 완료된 건입니다. 정말 취소하시겠습니까?')) {
+                        return;
+                    }
+                }
+            }
+            else {
+                if (statusSeq == 12) {
+                    if (!confirm('배송이 완료된 건입니다. 정말 취소하시겠습니까?')) {
+                        return;
+                    }
+                }
+            }
+           
+            var chkYN = $("[name=PgCancel]").is(":checked");
+            var confirm_str = "";
+            var checkCnt = $("[type=checkbox]").length;
+            var selValue = $(".canceltype1").find("option:selected").val();
+            var selText = $(".canceltype1").find("option:selected").text();
+
+            if (selValue == "") {
+                alert("취소 사유를 선택해 주세요");
+                $(".canceltype1").focus();
+                return false;
+
+            }
+
+            if (chkYN == true) {
+                confirm_str = "데이콤 결제취소가 체크 되었습니다.\n데이콤 결제가 취소 됩니다.\n취소를 진행하시겠습니까??";
+            } else {
+                confirm_str = "데이콤 결제취소가 체크 되지 않았습니다.\n데이콤 결제는 취소되지 않습니다.\n취소를 진행하시겠습니까??";
+            }
+
+
+            if (checkCnt == "2") {
+                if (confirm(confirm_str) == true) {    //확인
+                    if (selText != "기타") {
+                        var typeValue = $(".canceltype2").find("option:selected").val();
+                        var typeText = $(".canceltype2").find("option:selected").text();
+
+                        if (typeValue == "") {
+                            alert("취소 사유를 선택해 주세요");
+                            $(".canceltype2").focus();
+                            return false;
+                        }
+                        $(".canceltypecomment").val(typeText);
+                        $("#CancelType").val(typeValue);
+
+                    } else {
+                        if ($.trim($(".canceltypecomment").val()) == "") {
+                            alert("취소 사유를 입력해 주세요");
+                            $(".canceltypecomment").focus();
+                            return false;
+
+                        }
+
+                        $("#CancelType").val(selValue);
+
+                    }
+                } else { return false; }  //취소
+            } else {
+                if (selText != "기타") {
+                    var typeValue = $(".canceltype2").find("option:selected").val();
+                    var typeText = $(".canceltype2").find("option:selected").text();
+
+                    if (typeValue == "") {
+                        alert("취소 사유를 선택해 주세요");
+                        $(".canceltype2").focus();
+                        return false;
+                    }
+
+                    $(".canceltypecomment").val(typeText);
+                    $("#CancelType").val(typeValue);
+
+
+                } else {
+                    if ($.trim($(".canceltypecomment").val()) == "") {
+                        alert("취소 사유를 입력해 주세요");
+                        $(".canceltypecomment").focus();
+                        return false;
+
+                    }
+
+                    $("#CancelType").val(selValue);
+
+                }
+
+            }
+
+
+        }
+
+        if ($("#RefundDate").val() == ""){
+            alert("환불(예정)일 입력하세요.");
+            $("#RefundDate").focus();
+            return false;
+        }
+        if ($("#RefundPrice").val() == "") {
+            alert("환불금액을 입력하세요.");
+            $("#RefundPrice").focus();
+            return false;
+        }
+        
+        if ($("#RefundBank").val() == ""|| $("#RefundBankAccount").val() == "" ||  $("#RefundUserName").val() == ""){
+            alert("환불 계좌정보를 모두 입력해 주세요.");
+            $("#RefundBank").focus();
+            return false;
+        }
+
+
+        $("#RefundCode").val($("#RefundType2").find("option:selected").attr("class"));
+        $("#SettlePrice").val( $("#SettlePrice").val().replace(/,/g, ""));
+
+        var form = $(".Refundfrm");
+        var url = form.attr('action');
+         $(".loader").show();
+        $.ajax({
+                cache: false,
+                url: url,
+                type: 'POST',
+                data: form.serialize(),
+                success: function (data) {
+                     $(".loader").hide();
+
+                    if (data.code == "0000") {
+                         if ($(".refund_btn").hasClass("cancel_refund_btn"))
+                         {  
+                             alert("결제취소 및 환불 등록이 정상 처리되었습니다.\n빠른손에서 다시 주문 조회 해주세요.");
+                             window.close();
+
+                    } else { alert("환불 등록이 정상 처리되었습니다.\n빠른손에서 다시 주문 조회 해주세요."); window.close(); }
+                    // else if (data.code == "7777") {
+                    //    alert("환불 등록 오류입니다.\n 입력값을 재확인후 다시 시도해주세요." + data.message);
+                    //} else if (data.code == "8888") {
+                    //    alert("결제취소 오류입니다.\n 다시 시도해주세요." + data.message);
+                    }
+                    else {
+                        alert("시스템 오류입니다. 입력정보를 다시 확인하셔서 시도해주세요." + data.message);
+                    }
+                    $(".loader").hide();
+                }, 
+                error: function (xhr, status) {
+                    alert("시스템 오류입니다 = " + status);
+                    $(".loader").hide();
+                }
+        });
+
+    });
+</script>
+
+           
